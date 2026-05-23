@@ -25,7 +25,11 @@ const ViewGymById = () => {
   const [gym, setGym] = useState<GymDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [profile, setProfile] = useState<{ id?: number; name?: string; email?: string } | null>(null);
+  const [profile, setProfile] = useState<{
+    id?: number;
+    name?: string;
+    email?: string;
+  } | null>(null);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editRating, setEditRating] = useState<number | "">("");
   const [editComment, setEditComment] = useState<string>("");
@@ -114,7 +118,8 @@ const ViewGymById = () => {
           <ul className="vg-reviews">
             {gym.reviews.map((review) => {
               const isOwner =
-                profile && (profile.name === review.user || profile.email === review.user);
+                profile &&
+                (profile.name === review.user || profile.email === review.user);
               const isEditing = editingId === review.id;
 
               return (
@@ -148,7 +153,9 @@ const ViewGymById = () => {
                     )}
                   </div>
 
-                  {!isEditing && <div className="vr-comment">{review.comment}</div>}
+                  {!isEditing && (
+                    <div className="vr-comment">{review.comment}</div>
+                  )}
 
                   {isEditing && (
                     <form
@@ -156,23 +163,35 @@ const ViewGymById = () => {
                       onSubmit={async (e) => {
                         e.preventDefault();
                         try {
-                          const body: any = { rating: Number(editRating), comment: editComment };
-                          const resp = await axios.patch(`http://localhost:3000/reviews/${review.id}`, body, {
-                            withCredentials: true,
-                          });
+                          const body: any = {
+                            rating: Number(editRating),
+                            comment: editComment,
+                          };
+                          const resp = await axios.patch(
+                            `http://localhost:3000/reviews/${review.id}`,
+                            body,
+                            {
+                              withCredentials: true,
+                            },
+                          );
                           // update local state
                           setGym((g) => {
                             if (!g) return g;
                             return {
                               ...g,
-                              reviews: g.reviews.map((r) => (r.id === review.id ? resp.data : r)),
+                              reviews: g.reviews.map((r) =>
+                                r.id === review.id ? resp.data : r,
+                              ),
                             } as GymDetails;
                           });
                           setEditingId(null);
                           setEditRating("");
                           setEditComment("");
                         } catch (err: any) {
-                          alert(err?.response?.data?.error || "Failed to update review");
+                          alert(
+                            err?.response?.data?.error ||
+                              "Failed to update review",
+                          );
                         }
                       }}
                     >
@@ -183,12 +202,21 @@ const ViewGymById = () => {
                           min={1}
                           max={5}
                           value={editRating as any}
-                          onChange={(e) => setEditRating(e.target.value === "" ? "" : Number(e.target.value))}
+                          onChange={(e) =>
+                            setEditRating(
+                              e.target.value === ""
+                                ? ""
+                                : Number(e.target.value),
+                            )
+                          }
                         />
                       </label>
                       <label>
                         Comment:
-                        <textarea value={editComment} onChange={(e) => setEditComment(e.target.value)} />
+                        <textarea
+                          value={editComment}
+                          onChange={(e) => setEditComment(e.target.value)}
+                        />
                       </label>
                       <button type="submit">Save</button>
                     </form>
