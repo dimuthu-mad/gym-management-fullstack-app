@@ -48,6 +48,57 @@ app.get("/gyms", async (req, res) => {
   }
 });
 
+app.patch("/reviews/:id", requiresAuth(), async (req, res) => {
+  try {
+    const reviewId = Number(req.params.id);
+    if (!Number.isInteger(reviewId)) {
+      return res.status(400).json({ error: "Invalid review id" });
+    }
+
+    const profile = req.oidc?.user;
+    if (!profile?.sub) return res.status(401).json({ error: "Not authenticated" });
+
+    const currentUser = await ensureUserFromProfile(profile, "USER");
+
+    const review = await prisma.review.findUnique({
+      where: { id: reviewId },
+    });
+
+    if (!review) return res.status(404).json({ error: "Review not found" });
+    if (review.userId !== currentUser.id)
+      return res.status(403).json({ error: "Not allowed to update this review" });
+
+    const rating = req.body.rating === undefined ? undefined : Number(req.body.rating);
+    const comment = req.body.comment === undefined ? undefined : String(req.body.comment).trim();
+
+    const data = {};
+    if (rating !== undefined) {
+      if (Number.isNaN(rating)) return res.status(400).json({ error: "Invalid rating" });
+      data.rating = rating;
+    }
+    if (comment !== undefined) {
+      if (!comment) return res.status(400).json({ error: "Comment cannot be empty" });
+      data.comment = comment;
+    }
+
+    if (Object.keys(data).length === 0)
+      return res.status(400).json({ error: "No updatable fields provided" });
+
+    const updated = await prisma.review.update({
+      where: { id: reviewId },
+      data,
+      include: {
+        user: { select: { name: true, email: true } },
+      },
+    });
+
+    res.json(formatReview(updated));
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Failed to update review" });
+  }
+});
+
 app.get("/gyms/:id", async (req, res) => {
   try {
     const gymId = Number(req.params.id);
