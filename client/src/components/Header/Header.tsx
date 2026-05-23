@@ -27,7 +27,7 @@ const Header = () => {
     <header className="app-header">
       <div className="header-inner">
         <NavLink to="/" className="brand-link">
-          Gym Review App
+          FitTrack
         </NavLink>
 
         <nav className="header-nav">

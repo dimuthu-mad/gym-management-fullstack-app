@@ -5,7 +5,6 @@ const Main = () => {
   return (
     <div>
       <Header />
-      <hr />
       <Outlet />
     </div>
   );
