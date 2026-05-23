@@ -10,6 +10,29 @@ jobs:
   backend-tests:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: gym_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d gym_test"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      SECRET: test-secret-test-secret-test-secret-test-secret
+      CLIENT_ID: test-client-id
+      ISSUER_BASE_URL: https://example.com
+      BASE_URL: http://localhost:3000
+      FRONTEND_URL: http://localhost:5173
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gym_test
+
     steps:
       - uses: actions/checkout@v4
 
@@ -22,16 +45,21 @@ jobs:
         run: npm install
         working-directory: ./backend
 
+      - name: Generate Prisma Client
+        run: npx prisma generate
+        working-directory: ./backend
+
+      - name: Run Prisma migrations
+        run: npx prisma migrate deploy
+        working-directory: ./backend
+
+      - name: Seed database
+        run: npx prisma db seed
+        working-directory: ./backend
+
       - name: Run backend tests
         run: npm test
         working-directory: ./backend
-        env:
-          SECRET: test-secret-test-secret-test-secret-test-secret
-          CLIENT_ID: test-client-id
-          ISSUER_BASE_URL: https://example.com
-          BASE_URL: http://localhost:3000
-          FRONTEND_URL: http://localhost:5173
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gym_test
 
   client-tests:
     runs-on: ubuntu-latest
