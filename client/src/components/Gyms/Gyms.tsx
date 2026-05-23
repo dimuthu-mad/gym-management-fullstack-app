@@ -50,26 +50,29 @@ const GymData = () => {
   }
 
   const q = query.trim().toLowerCase();
-  const filteredGyms = (q
-    ? gyms.filter((g) => {
-        return (
-          g.name.toLowerCase().includes(q) ||
-          g.location.toLowerCase().includes(q) ||
-          (g.description || "").toLowerCase().includes(q)
-        );
-      })
-    : gyms
+  const filteredGyms = (
+    q
+      ? gyms.filter((g) => {
+          return (
+            g.name.toLowerCase().includes(q) ||
+            g.location.toLowerCase().includes(q) ||
+            (g.description || "").toLowerCase().includes(q)
+          );
+        })
+      : gyms
   ).filter((g) => {
     if (minRating !== "") {
       if (g.rating === null || g.rating === undefined) return false;
       if (g.rating < (minRating as number)) return false;
     }
     if (minPrice !== "") {
-      if (g.membershipPrice === null || g.membershipPrice === undefined) return false;
+      if (g.membershipPrice === null || g.membershipPrice === undefined)
+        return false;
       if (g.membershipPrice < (minPrice as number)) return false;
     }
     if (maxPrice !== "") {
-      if (g.membershipPrice === null || g.membershipPrice === undefined) return false;
+      if (g.membershipPrice === null || g.membershipPrice === undefined)
+        return false;
       if (g.membershipPrice > (maxPrice as number)) return false;
     }
     return true;
@@ -93,7 +96,12 @@ const GymData = () => {
               onChange={(e) => setQuery(e.target.value)}
             />
             {query && (
-              <button className="gyms-search-clear" onClick={() => setQuery("")}>Clear</button>
+              <button
+                className="gyms-search-clear"
+                onClick={() => setQuery("")}
+              >
+                Clear
+              </button>
             )}
           </div>
         </div>
@@ -101,7 +109,14 @@ const GymData = () => {
         <div className="gyms-filters">
           <label className="filter-item">
             Min rating:
-            <select value={minRating as any} onChange={(e) => setMinRating(e.target.value === "" ? "" : Number(e.target.value))}>
+            <select
+              value={minRating as any}
+              onChange={(e) =>
+                setMinRating(
+                  e.target.value === "" ? "" : Number(e.target.value),
+                )
+              }
+            >
               <option value="">Any</option>
               <option value={1}>1+</option>
               <option value={2}>2+</option>
@@ -113,15 +128,37 @@ const GymData = () => {
 
           <label className="filter-item">
             Price from:
-            <input type="number" min={0} value={minPrice as any} onChange={(e) => setMinPrice(e.target.value === "" ? "" : Number(e.target.value))} />
+            <input
+              type="number"
+              min={0}
+              value={minPrice as any}
+              onChange={(e) =>
+                setMinPrice(e.target.value === "" ? "" : Number(e.target.value))
+              }
+            />
           </label>
 
           <label className="filter-item">
             to:
-            <input type="number" min={0} value={maxPrice as any} onChange={(e) => setMaxPrice(e.target.value === "" ? "" : Number(e.target.value))} />
+            <input
+              type="number"
+              min={0}
+              value={maxPrice as any}
+              onChange={(e) =>
+                setMaxPrice(e.target.value === "" ? "" : Number(e.target.value))
+              }
+            />
           </label>
 
-          <button className="filter-reset" onClick={() => { setMinRating(""); setMinPrice(""); setMaxPrice(""); setQuery(""); }}>
+          <button
+            className="filter-reset"
+            onClick={() => {
+              setMinRating("");
+              setMinPrice("");
+              setMaxPrice("");
+              setQuery("");
+            }}
+          >
             Reset
           </button>
         </div>
@@ -146,12 +183,17 @@ const GymData = () => {
                     <div className="gym-location">{gym.location}</div>
                     <div className="gym-meta">
                       <span className="gym-rating">{gym.rating ?? "-"}⭐</span>
-                      <span className="gym-price">{gym.membershipPrice?.toFixed(0)} SEK</span>
+                      <span className="gym-price">
+                        {gym.membershipPrice?.toFixed(0)} SEK
+                      </span>
                     </div>
                   </div>
                 </Link>
                 <div className="gym-actions">
-                  <Link className="create-review" to={`/gyms/${gym.id}/reviews`}>
+                  <Link
+                    className="create-review"
+                    to={`/gyms/${gym.id}/reviews`}
+                  >
                     Create Review
                   </Link>
                 </div>
