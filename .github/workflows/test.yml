@@ -12,8 +12,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      with:
-      submodules: false
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -39,8 +37,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      with:
-      submodules: false
 
       - name: Use Node.js
         uses: actions/setup-node@v4
