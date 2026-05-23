@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { PrismaClient } from "@prisma/client";
 import { authMiddleware } from "./middleware/auth.js";
+import { ensureUserFromProfile } from "./auth-user.js";
 import pkg from "express-openid-connect";
 const { requiresAuth } = pkg;
 
@@ -119,22 +120,7 @@ app.post("/gyms/:id/reviews", requiresAuth(), async (req, res) => {
         .json({ error: "Authenticated user profile is required" });
     }
 
-    const currentUser = await prisma.user.upsert({
-      where: {
-        auth0Id: profile.sub,
-      },
-      update: {
-        email: profile.email,
-        name: profile.name || profile.nickname || profile.email,
-        picture: profile.picture || null,
-      },
-      create: {
-        auth0Id: profile.sub,
-        email: profile.email,
-        name: profile.name || profile.nickname || profile.email,
-        picture: profile.picture || null,
-      },
-    });
+    const currentUser = await ensureUserFromProfile(profile, "USER");
 
     const newReview = await prisma.review.create({
       data: {
@@ -196,11 +182,16 @@ app.post("/gyms", requiresAuth(), async (req, res) => {
   }
 });
 
-app.get("/profile", requiresAuth(), (req, res) => {
+app.get("/profile", requiresAuth(), async (req, res) => {
   try {
-    res.json(req.oidc.user);
+    const profile = req.oidc?.user;
+    if (!profile) return res.status(401).json({ error: "Not authenticated" });
+
+    const user = await ensureUserFromProfile(profile, "USER");
+    res.json(user);
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error: "Failed to load profile" });
   }
 });
 
