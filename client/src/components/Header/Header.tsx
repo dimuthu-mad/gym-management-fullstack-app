@@ -117,7 +117,7 @@ const Header = () => {
                 href="http://localhost:3000/login"
                 className="auth-btn auth-login"
               >
-                Become a member
+                Login / Sign Up
               </a>
             )}
           </div>
@@ -236,7 +236,7 @@ const Header = () => {
                 className="auth-btn auth-login"
                 onClick={() => setMenuOpen(false)}
               >
-                Become a member
+                Login / Sign Up
               </a>
             )}
           </div>
