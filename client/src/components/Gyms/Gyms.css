@@ -24,6 +24,27 @@
   margin-bottom: 12px;
 }
 
+.gyms-search {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.gyms-search-input {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e6e6e6;
+  min-width: 220px;
+}
+
+.gyms-search-clear {
+  background: transparent;
+  border: none;
+  color: #0069ff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
 .gyms-header h1 {
   margin: 0;
   font-size: 20px;
@@ -87,6 +108,113 @@
   color: #444;
 }
 
+.gyms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.gyms-filters {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 4px 14px;
+  border-bottom: 1px solid #f0f3f6;
+  margin-bottom: 12px;
+}
+
+.filter-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+  color: #333;
+}
+
+.filter-item select,
+.filter-item input {
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid #e6e6e6;
+}
+
+.filter-reset {
+  margin-left: auto;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #e6e6e6;
+  background: #fff;
+  cursor: pointer;
+}
+
+.gym-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(20, 20, 30, 0.04);
+  overflow: hidden;
+  border: 1px solid #eef2f6;
+}
+
+.gym-card-link {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+
+.gym-image {
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+}
+
+.gym-body {
+  padding: 12px;
+}
+
+.gym-name {
+  margin: 0 0 6px;
+  font-size: 16px;
+  color: #111;
+}
+
+.gym-sub {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.gym-location {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.gym-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  color: #666;
+}
+
+.gym-actions {
+  padding: 10px 12px 14px;
+  display: flex;
+  gap: 8px;
+}
+
+.create-review {
+  margin-left: auto;
+  padding: 8px 12px;
+  background: #0069ff;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
 @media (max-width: 640px) {
   .gyms-card {
     padding: 14px;
@@ -95,5 +223,11 @@
   .gyms-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .gyms-search-input {
+    min-width: 120px;
   }
 }
