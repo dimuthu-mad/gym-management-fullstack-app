@@ -1,11 +1,13 @@
 // backend/index.js
 import express from "express";
 import cors from "cors";
+import { PrismaClient } from "@prisma/client";
 import { authMiddleware } from "./middleware/auth.js";
 import pkg from "express-openid-connect";
 const { requiresAuth } = pkg;
 
 const app = express();
+const prisma = new PrismaClient();
 
 app.use(authMiddleware); // Apply Auth0 middleware globally
 app.use(express.json());
@@ -16,74 +18,12 @@ app.use(
   }),
 );
 
-const gyms = [
-  {
-    id: 1,
-    name: "FitZone Gym",
-    location: "Stockholm",
-    description: "Modern gym with strength and cardio equipment.",
-    rating: 4.7,
-    membershipPrice: 499,
-    reviews: [
-      {
-        id: 1,
-        user: "Dimuthu",
-        rating: 5,
-        comment: "Very clean and friendly staff.",
-      },
-      {
-        id: 2,
-        user: "Anna",
-        rating: 4,
-        comment: "Good equipment but crowded evenings.",
-      },
-    ],
-  },
-
-  {
-    id: 2,
-    name: "Power House",
-    location: "Gothenburg",
-    description: "24/7 access gym with personal training.",
-    rating: 4.5,
-    membershipPrice: 599,
-    reviews: [
-      {
-        id: 1,
-        user: "John",
-        rating: 5,
-        comment: "Excellent trainers and facilities.",
-      },
-    ],
-  },
-
-  {
-    id: 3,
-    name: "Nordic Fitness",
-    location: "Malmö",
-    description: "Affordable fitness center with group classes.",
-    rating: 4.2,
-    membershipPrice: 399,
-    reviews: [],
-  },
-
-  {
-    id: 4,
-    name: "Iron Temple",
-    location: "Uppsala",
-    description: "Specialized gym for bodybuilding and powerlifting.",
-    rating: 4.8,
-    membershipPrice: 649,
-    reviews: [
-      {
-        id: 1,
-        user: "Sara",
-        rating: 5,
-        comment: "Perfect for serious lifting.",
-      },
-    ],
-  },
-];
+const formatReview = (review) => ({
+  id: review.id,
+  user: review.user?.name || review.user?.email || "Unknown user",
+  rating: review.rating,
+  comment: review.comment,
+});
 
 // Protected route
 app.get("/", (req, res) => {
@@ -92,64 +32,167 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/gyms", (req, res) => {
+app.get("/gyms", async (req, res) => {
   try {
+    const gyms = await prisma.gym.findMany({
+      orderBy: {
+        id: "asc",
+      },
+    });
+
     res.json(gyms);
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error: "Failed to load gyms" });
   }
 });
 
-app.get("/gyms/:id", (req, res) => {
+app.get("/gyms/:id", async (req, res) => {
   try {
-    const gymId = parseInt(req.params.id);
-    const gym = gyms.find((g) => g.id === gymId);
+    const gymId = Number(req.params.id);
+    if (!Number.isInteger(gymId)) {
+      return res.status(400).json({ error: "Invalid gym id" });
+    }
+
+    const gym = await prisma.gym.findUnique({
+      where: {
+        id: gymId,
+      },
+      include: {
+        reviews: {
+          include: {
+            user: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
+          },
+          orderBy: {
+            id: "asc",
+          },
+        },
+      },
+    });
+
     if (!gym) {
       return res.status(404).json({ error: "Gym not found" });
     }
-    res.json(gym);
+
+    res.json({
+      ...gym,
+      reviews: gym.reviews.map(formatReview),
+    });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error: "Failed to load gym" });
   }
 });
 
-app.post("/gyms/:id/reviews", requiresAuth(), (req, res) => {
+app.post("/gyms/:id/reviews", requiresAuth(), async (req, res) => {
   try {
-    const gymId = parseInt(req.params.id);
-    const gym = gyms.find((g) => g.id === gymId);
+    const gymId = Number(req.params.id);
+    if (!Number.isInteger(gymId)) {
+      return res.status(400).json({ error: "Invalid gym id" });
+    }
+
+    const gym = await prisma.gym.findUnique({
+      where: {
+        id: gymId,
+      },
+    });
+
     if (!gym) {
       return res.status(404).json({ error: "Gym not found" });
     }
-    const { user, rating, comment } = req.body;
-    const newReview = {
-      id: gym.reviews.length + 1,
-      user,
-      rating,
-      comment,
-    };
-    gym.reviews.push(newReview);
-    res.status(201).json(newReview);
+
+    const rating = Number(req.body.rating);
+    const comment = String(req.body.comment || "").trim();
+    if (!comment || Number.isNaN(rating)) {
+      return res.status(400).json({ error: "Rating and comment are required" });
+    }
+
+    const profile = req.oidc?.user;
+    if (!profile?.sub || !profile?.email) {
+      return res
+        .status(401)
+        .json({ error: "Authenticated user profile is required" });
+    }
+
+    const currentUser = await prisma.user.upsert({
+      where: {
+        auth0Id: profile.sub,
+      },
+      update: {
+        email: profile.email,
+        name: profile.name || profile.nickname || profile.email,
+        picture: profile.picture || null,
+      },
+      create: {
+        auth0Id: profile.sub,
+        email: profile.email,
+        name: profile.name || profile.nickname || profile.email,
+        picture: profile.picture || null,
+      },
+    });
+
+    const newReview = await prisma.review.create({
+      data: {
+        rating,
+        comment,
+        userId: currentUser.id,
+        gymId,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    res.status(201).json(formatReview(newReview));
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error: "Failed to create review" });
   }
 });
 
-app.post("/gyms", requiresAuth(), (req, res) => {
+app.post("/gyms", requiresAuth(), async (req, res) => {
   try {
-    const { name, location, description, rating, membershipPrice } = req.body;
-    const newGym = {
-      id: gyms.length + 1,
-      name,
-      location,
-      description,
-      rating,
-      membershipPrice,
+    const { name, location, description } = req.body;
+    const rating =
+      req.body.rating === undefined || req.body.rating === ""
+        ? null
+        : Number(req.body.rating);
+    const membershipPrice =
+      req.body.membershipPrice === undefined || req.body.membershipPrice === ""
+        ? null
+        : Number(req.body.membershipPrice);
+
+    if (!name || !location) {
+      return res.status(400).json({ error: "Name and location are required" });
+    }
+
+    const newGym = await prisma.gym.create({
+      data: {
+        name,
+        location,
+        description: description || null,
+        rating: Number.isNaN(rating) ? null : rating,
+        membershipPrice: Number.isNaN(membershipPrice) ? null : membershipPrice,
+      },
+    });
+
+    res.status(201).json({
+      ...newGym,
       reviews: [],
-    };
-    gyms.push(newGym);
-    res.status(201).json(newGym);
+    });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error: "Failed to create gym" });
   }
 });
 
