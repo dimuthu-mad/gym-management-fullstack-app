@@ -87,25 +87,17 @@ const GymData = () => {
       <div className="gyms-card">
         <div className="gyms-header">
           <h1>Gym Listings</h1>
-          <div className="gyms-search">
-            <input
-              aria-label="Search gyms"
-              className="gyms-search-input"
-              placeholder="Search by name, location or description"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            {query && (
-              <button
-                className="gyms-search-clear"
-                onClick={() => setQuery("")}
-              >
-                Clear
-              </button>
-            )}
-          </div>
         </div>
 
+        <div className="gyms-search">
+          <input
+            aria-label="Search gyms"
+            className="gyms-search-input"
+            placeholder="Search by name, location or description"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
         <div className="gyms-filters">
           <label className="filter-item">
             Min rating:

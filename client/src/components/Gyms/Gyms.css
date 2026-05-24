@@ -21,33 +21,42 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 50px;
 }
 
 .gyms-search {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+  width: 100%;
+  margin-bottom: 14px;
 }
 
 .gyms-search-input {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #e6e6e6;
-  min-width: 220px;
+  width: 100%;
+  box-sizing: border-box;
+  height: 33px;
+  padding: 0 20px;
+  border-radius: 14px;
+  border: 1px solid #aeb8c4;
+  background: #fff;
+  font-size: 18px;
+  color: #1f2937;
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-.gyms-search-clear {
-  background: transparent;
-  border: none;
-  color: #0069ff;
-  cursor: pointer;
-  font-weight: 600;
+.gyms-search-input::placeholder {
+  color: #8b96a5;
+}
+
+.gyms-search-input:focus {
+  border-color: #6f7f92;
+  box-shadow: 0 0 0 3px rgba(111, 127, 146, 0.12);
 }
 
 .gyms-header h1 {
   margin: 0;
-  font-size: 20px;
+  font-size: 29px;
   color: #222;
 }
 
@@ -110,7 +119,7 @@
 
 .gyms-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
 }
 
@@ -118,9 +127,10 @@
   display: flex;
   gap: 12px;
   align-items: center;
-  padding: 8px 4px 14px;
-  border-bottom: 1px solid #f0f3f6;
-  margin-bottom: 12px;
+  flex-wrap: wrap;
+  padding: 0 0 14px;
+  border-bottom: 1px solid #e8edf3;
+  margin-bottom: 14px;
 }
 
 .filter-item {
@@ -128,23 +138,36 @@
   gap: 8px;
   align-items: center;
   font-size: 14px;
-  color: #333;
+  color: #344054;
+  background: #fff;
+  border: 1px solid #aeb8c4;
+  border-radius: 14px;
+  padding: 0 14px;
+  height: 33px;
 }
 
 .filter-item select,
 .filter-item input {
-  padding: 6px 8px;
-  border-radius: 8px;
-  border: 1px solid #e6e6e6;
+  height: 100%;
+  min-width: 86px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+  color: #1f2937;
+  padding: 0;
 }
 
 .filter-reset {
   margin-left: auto;
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid #e6e6e6;
+  padding: 0 16px;
+  height: 33px;
+  border-radius: 14px;
+  border: 1px solid #aeb8c4;
   background: #fff;
   cursor: pointer;
+  font-weight: 600;
+  color: #1f2937;
 }
 
 .gym-card {
@@ -224,10 +247,28 @@
     flex-direction: column;
     align-items: flex-start;
   }
+
+  .gyms-search-input {
+    height: 52px;
+    font-size: 16px;
+  }
+
+  .gyms-filters {
+    gap: 10px;
+  }
+
+  .filter-item,
+  .filter-reset {
+    width: 100%;
+  }
+
+  .filter-reset {
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 480px) {
   .gyms-search-input {
-    min-width: 120px;
+    height: 50px;
   }
 }
