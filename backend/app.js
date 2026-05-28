@@ -255,6 +255,29 @@ app.get("/profile", requiresAuth(), async (req, res) => {
   }
 });
 
+const getGymReviewsCount = async (req, res) => {
+  try {
+    const gymId = Number(req.params.id);
+    if (!Number.isInteger(gymId)) {
+      return res.status(400).json({ error: "Invalid gym id" });
+    }
+
+    const reviewCount = await prisma.review.count({
+      where: {
+        gymId,
+      },
+    });
+    res.json({ count: reviewCount });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Failed to load review count" });
+  }
+};
+
+// Support both spellings to avoid frontend/backend mismatch.
+app.get("/gyms/:id/reviewcount", getGymReviewsCount);
+app.get("/gyms/:id/reviewscount", getGymReviewsCount);
+
 app.get("/auth/logout", (req, res) => {
   return res.oidc.logout({
     returnTo: process.env.FRONTEND_URL || "http://localhost:5173",

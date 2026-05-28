@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./Gyms.css";
+import GymCard from "./GymCard";
 
 type gymsProfile = {
   id: number;
@@ -160,36 +161,7 @@ const GymData = () => {
         ) : (
           <div className="gyms-grid">
             {filteredGyms.map((gym) => (
-              <article key={gym.id} className="gym-card">
-                <Link to={`/gyms/${gym.id}`} className="gym-card-link">
-                  <div
-                    className="gym-image"
-                    aria-hidden
-                    style={{
-                      backgroundImage: `url(${sampleImages[gym.id % sampleImages.length]})`,
-                    }}
-                  />
-                  <div className="gym-body">
-                    <h3 className="gym-name">{gym.name}</h3>
-                    <div className="gym-sub">Gym</div>
-                    <div className="gym-location">{gym.location}</div>
-                    <div className="gym-meta">
-                      <span className="gym-rating">{gym.rating ?? "-"}⭐</span>
-                      <span className="gym-price">
-                        {gym.membershipPrice?.toFixed(0)} SEK
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-                <div className="gym-actions">
-                  <Link
-                    className="create-review"
-                    to={`/gyms/${gym.id}/reviews`}
-                  >
-                    Create Review
-                  </Link>
-                </div>
-              </article>
+              <GymCard key={gym.id} gym={gym} />
             ))}
           </div>
         )}

@@ -1,0 +1,149 @@
+.gc-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  display: flex;
+  flex-direction: column;
+}
+
+.gc-media {
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.gc-fav {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #fff;
+  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(14, 165, 233, 0.08);
+}
+
+.gc-body {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.gc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gc-title {
+  margin: 0;
+  font-size: 25px;
+  font-weight: 800;
+  color: #071530;
+}
+.gc-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.gc-star {
+  color: #fbbf24;
+  font-size: 18px;
+}
+.gc-rating-val {
+  font-weight: 700;
+}
+.gc-reviews {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.gc-location {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: #6b7280;
+}
+
+.gc-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.gc-tag {
+  background: #eef6ff;
+  color: #2563eb;
+  padding: 6px 10px;
+  border-radius: 9999px;
+  font-size: 13px;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.gc-price {
+  margin-top: 6px;
+  font-size: 15px;
+  color: #374151;
+}
+.gc-price-amt {
+  color: #059669;
+  font-weight: 800;
+  margin-left: 6px;
+}
+
+.gc-review-count {
+  color: #6b7280;
+  align-self: center;
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+.gc-features {
+  /* removed - features list intentionally omitted */
+}
+.gc-feature {
+  /* removed */
+}
+
+.gc-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+.gc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-weight: 400;
+  text-decoration: none;
+  font-size: 14px;
+}
+.gc-outline {
+  border: 2px solid #2563eb;
+  color: #2563eb;
+  background: transparent;
+}
+.gc-primary {
+  background: linear-gradient(180deg, #1e90ff, #0069ff);
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .gc-media {
+    height: 140px;
+  }
+  .gc-title {
+    font-size: 24px;
+  }
+}
