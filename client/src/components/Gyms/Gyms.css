@@ -8,7 +8,7 @@
 
 .gyms-card {
   width: 100%;
-  max-width: 980px;
+  max-width: 1120px;
   background: #ffffff;
   border: 1px solid #e6e6e6;
   border-radius: 12px;
@@ -119,8 +119,8 @@
 
 .gyms-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
 }
 
 .gyms-filters {
