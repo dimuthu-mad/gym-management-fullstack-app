@@ -8,12 +8,12 @@
 
 .gyms-card {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1400px;
   background: #ffffff;
   border: 1px solid #e6e6e6;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(20, 20, 30, 0.04);
-  padding: 20px 22px;
+  padding: 24px 28px;
 }
 
 .gyms-header {
