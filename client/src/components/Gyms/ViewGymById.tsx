@@ -37,6 +37,9 @@ const ViewGymById = () => {
   const [showWriteForm, setShowWriteForm] = useState(false);
   const [newRating, setNewRating] = useState<number | "">("");
   const [newComment, setNewComment] = useState("");
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editRating, setEditRating] = useState<number | "">("");
+  const [editComment, setEditComment] = useState("");
 
   const reviewsRef = useRef<HTMLDivElement | null>(null);
 
@@ -244,6 +247,8 @@ const ViewGymById = () => {
               ? new Date(review.createdAt).toLocaleDateString()
               : new Date().toLocaleDateString();
             const color = avatarColors[idx % avatarColors.length];
+            const isOwner = profile && (profile.name === review.user || profile.email === review.user);
+            const isEditing = editingId === review.id;
             return (
               <li key={review.id} className="vg-review-item">
                 <div className="vr-left">
@@ -258,13 +263,75 @@ const ViewGymById = () => {
                       <div className="vr-date">{date}</div>
                     </div>
                     <div className="vr-stars-block">
-                      <div className="vr-stars">
-                        {renderStars(review.rating)}
-                      </div>
+                      <div className="vr-stars">{renderStars(review.rating)}</div>
                       <div className="vr-score">{review.rating}/5</div>
                     </div>
                   </div>
-                  <div className="vr-comment">{review.comment}</div>
+
+                  {!isEditing && (
+                    <div className="vr-comment">{review.comment}</div>
+                  )}
+
+                  {isEditing && (
+                    <form className="vr-edit-form" onSubmit={async (e) => {
+                      e.preventDefault();
+                      try {
+                        const body: any = { rating: Number(editRating), comment: editComment };
+                        const resp = await axios.patch(`http://localhost:3000/reviews/${review.id}`, body, { withCredentials: true });
+                        setGym(g => g ? { ...g, reviews: g.reviews.map(r => r.id === review.id ? resp.data : r) } as GymDetails : g);
+                        setEditingId(null);
+                        setEditRating("");
+                        setEditComment("");
+                      } catch (err: any) {
+                        alert(err?.response?.data?.error || 'Failed to update review');
+                      }
+                    }}>
+                      <div className="vr-edit-row">
+                        <label>
+                          Rating:
+                          <input type="number" min={1} max={5} value={editRating as any} onChange={(e) => setEditRating(e.target.value === '' ? '' : Number(e.target.value))} />
+                        </label>
+                        <button type="submit" className="vr-save-btn">Save</button>
+                        <button type="button" className="vr-cancel-btn" onClick={() => { setEditingId(null); setEditRating(''); setEditComment(''); }}>Cancel</button>
+                      </div>
+                      <label>
+                        Comment:
+                        <textarea value={editComment} onChange={(e) => setEditComment(e.target.value)} />
+                      </label>
+                    </form>
+                  )}
+
+                  {!isEditing && isOwner && (
+                    <div style={{ marginTop: 8 }}>
+                      <button
+                        className="vr-edit-btn"
+                        onClick={() => {
+                          setEditingId(review.id);
+                          setEditRating(review.rating);
+                          setEditComment(review.comment);
+                        }}
+                        aria-label="Edit review"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          width={16}
+                          height={16}
+                          aria-hidden="true"
+                        >
+                          <path d="M12 20h9" />
+                          <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                        </svg>
+                        <span className="sr-only">Edit</span>
+                      </button>
+                    </div>
+                  )}
+
                 </div>
               </li>
             );

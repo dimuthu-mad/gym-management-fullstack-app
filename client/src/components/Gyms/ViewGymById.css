@@ -255,6 +255,24 @@
   font-size: 13px;
   cursor: pointer;
 }
+.vr-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #0f172a;
+  background: #fff;
+}
+.vr-edit-btn svg {
+  width: 16px;
+  height: 16px;
+}
+.sr-only {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
 .vr-edit-form {
   margin-top: 8px;
   display: flex;
@@ -264,9 +282,18 @@
 .vr-edit-form input[type="number"],
 .vr-edit-form textarea {
   width: 100%;
-  padding: 8px;
+  padding: 10px 12px;
   border: 1px solid #e6e6e6;
-  border-radius: 6px;
+  border-radius: 8px;
+  background: #fff;
+  color: #0f172a;
+  box-shadow: 0 1px 2px rgba(16,24,40,0.04);
+  box-sizing: border-box;
+}
+.vr-edit-form label {
+  color: #6b7280;
+  font-size: 14px;
+  display: block;
 }
 .vr-edit-row {
   display: flex;
@@ -281,6 +308,24 @@
   border-radius: 6px;
   cursor: pointer;
 }
+.vr-save-btn:active { transform: translateY(1px); }
+.vr-save-btn:focus { outline: 3px solid rgba(0,105,255,0.12); }
+
+.vr-cancel-btn {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #374151;
+}
+.vr-cancel-btn:focus { outline: 3px solid rgba(99,102,241,0.08); }
+
+.vr-edit-form textarea { min-height: 96px; resize: vertical; }
+
+.vr-edit-row label { display: flex; gap: 8px; align-items: center; }
+.vr-edit-row input[type="number"] { width: 84px; }
 
 .vg-no-reviews {
   color: #666;
