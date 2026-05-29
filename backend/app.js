@@ -230,6 +230,7 @@ app.post("/gyms", requiresAuth(), async (req, res) => {
         description: description || null,
         rating: Number.isNaN(rating) ? null : rating,
         membershipPrice: Number.isNaN(membershipPrice) ? null : membershipPrice,
+        imageUrl: null,
       },
     });
 

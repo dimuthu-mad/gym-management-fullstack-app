@@ -10,6 +10,7 @@ type Gym = {
   description?: string;
   rating?: number;
   membershipPrice?: number;
+  imageUrl?: string;
   reviews?: Review[];
 };
 
@@ -51,7 +52,10 @@ const GymCard = ({ gym }: { gym: Gym }) => {
 
   return (
     <article className="gc-card">
-      <div className="gc-media" style={{ backgroundImage: `url(${img})` }}>
+      <div
+        className="gc-media"
+        style={{ backgroundImage: `url(${gym.imageUrl ?? img})` }}
+      >
         <button className="gc-fav" aria-label={`Favorite ${gym.name}`}>
           <svg
             width="18"
