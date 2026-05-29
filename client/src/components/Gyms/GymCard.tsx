@@ -111,12 +111,12 @@ const GymCard = ({ gym }: { gym: Gym }) => {
         </div>
 
         <div className="gc-actions">
-          <Link to={`/gyms/${gym.id}`} className="gc-btn gc-outline">
+          <Link to={`/gyms/${gym.id}`} className="gc-btn gc-primary">
             View Details
           </Link>
-          <Link to={`/gyms/${gym.id}/reviews`} className="gc-btn gc-primary">
+          {/* <Link to={`/gyms/${gym.id}/reviews`} className="gc-btn gc-primary">
             Write Review
-          </Link>
+          </Link> */}
         </div>
       </div>
     </article>

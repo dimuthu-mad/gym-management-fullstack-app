@@ -42,8 +42,8 @@
 }
 .gc-title {
   margin: 0;
-  font-size: 25px;
-  font-weight: 800;
+  font-size: 24px;
+  font-weight: 500;
   color: #071530;
 }
 .gc-rating {
@@ -93,6 +93,7 @@
   margin-top: 6px;
   font-size: 15px;
   color: #374151;
+  text-align: left;
 }
 .gc-price-amt {
   color: #059669;
@@ -102,9 +103,10 @@
 
 .gc-review-count {
   color: #6b7280;
-  align-self: center;
+  text-align: left;
   margin-top: 6px;
   font-weight: 600;
+  font-size: 14px;
 }
 
 .gc-features {
