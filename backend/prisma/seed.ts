@@ -69,6 +69,8 @@ async function seed() {
 
       membershipPrice: 499,
 
+      imageUrl: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48",
+
       rating: 4.9,
     },
   });
@@ -82,6 +84,8 @@ async function seed() {
       description: "Strength training and bodybuilding",
 
       membershipPrice: 699,
+
+      imageUrl: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f",
 
       rating: 4.7,
     },
@@ -97,6 +101,8 @@ async function seed() {
 
       membershipPrice: 399,
 
+      imageUrl: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438",
+
       rating: 4.4,
     },
   });
@@ -110,6 +116,8 @@ async function seed() {
       description: "Professional athlete training",
 
       membershipPrice: 899,
+
+      imageUrl: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61",
 
       rating: 5,
     },

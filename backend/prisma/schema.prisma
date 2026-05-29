@@ -53,6 +53,8 @@ model Gym {
 
   membershipPrice Float?
 
+  imageUrl        String?
+
   rating Float?
 
 
