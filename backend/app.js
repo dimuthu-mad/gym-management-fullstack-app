@@ -104,7 +104,7 @@ app.patch("/reviews/:id", requiresAuth(), async (req, res) => {
 
     res.json(formatReview(updated));
   } catch (error) {
-    console.log(error);
+    console.error(error?.stack || error);
     res.status(500).json({ error: "Failed to update review" });
   }
 });
@@ -202,8 +202,8 @@ app.post("/gyms/:id/reviews", requiresAuth(), async (req, res) => {
 
     res.status(201).json(formatReview(newReview));
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Failed to create review" });
+     console.error(error?.stack || error);
+     res.status(500).json({ error: "Failed to create review" });
   }
 });
 
@@ -238,8 +238,8 @@ app.post("/gyms", requiresAuth(), async (req, res) => {
       reviews: [],
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Failed to create gym" });
+     console.error(error?.stack || error);
+     res.status(500).json({ error: "Failed to create gym" });
   }
 });
 
@@ -251,8 +251,8 @@ app.get("/profile", requiresAuth(), async (req, res) => {
     const user = await ensureUserFromProfile(profile, "USER");
     res.json(user);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Failed to load profile" });
+     console.error(error?.stack || error);
+     res.status(500).json({ error: "Failed to load profile" });
   }
 });
 
@@ -270,8 +270,8 @@ const getGymReviewsCount = async (req, res) => {
     });
     res.json({ count: reviewCount });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Failed to load review count" });
+     console.error(error?.stack || error);
+     res.status(500).json({ error: "Failed to load review count" });
   }
 };
 

@@ -212,6 +212,11 @@ const ViewGymById = () => {
                   { rating: Number(newRating), comment: newComment },
                   { withCredentials: true },
                 );
+                // basic client-side validation already done, but double-check
+                if (!newComment || newRating === "" || Number.isNaN(Number(newRating))) {
+                  alert("Please provide a rating (1-5) and a comment.");
+                  return;
+                }
                 setGym((g) =>
                   g ? { ...g, reviews: [resp.data, ...g.reviews] } : g,
                 );
@@ -219,7 +224,11 @@ const ViewGymById = () => {
                 setNewComment("");
                 setShowWriteForm(false);
               } catch (err: any) {
-                alert(err?.response?.data?.error || "Failed to post review");
+                console.error("Create review error:", err);
+                const serverMsg = err?.response?.data || err?.message || err;
+                alert(
+                  serverMsg?.error || serverMsg?.message || JSON.stringify(serverMsg) || "Failed to post review",
+                );
               }
             }}
           >
@@ -338,10 +347,9 @@ const ViewGymById = () => {
                           setEditRating("");
                           setEditComment("");
                         } catch (err: any) {
-                          alert(
-                            err?.response?.data?.error ||
-                              "Failed to update review",
-                          );
+                          console.error('Update review error:', err);
+                          const serverMsg = err?.response?.data || err?.message || err;
+                          alert(serverMsg?.error || serverMsg?.message || JSON.stringify(serverMsg) || 'Failed to update review');
                         }
                       }}
                     >
