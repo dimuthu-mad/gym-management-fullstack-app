@@ -213,7 +213,11 @@ const ViewGymById = () => {
                   { withCredentials: true },
                 );
                 // basic client-side validation already done, but double-check
-                if (!newComment || newRating === "" || Number.isNaN(Number(newRating))) {
+                if (
+                  !newComment ||
+                  newRating === "" ||
+                  Number.isNaN(Number(newRating))
+                ) {
                   alert("Please provide a rating (1-5) and a comment.");
                   return;
                 }
@@ -227,7 +231,10 @@ const ViewGymById = () => {
                 console.error("Create review error:", err);
                 const serverMsg = err?.response?.data || err?.message || err;
                 alert(
-                  serverMsg?.error || serverMsg?.message || JSON.stringify(serverMsg) || "Failed to post review",
+                  serverMsg?.error ||
+                    serverMsg?.message ||
+                    JSON.stringify(serverMsg) ||
+                    "Failed to post review",
                 );
               }
             }}
@@ -347,9 +354,15 @@ const ViewGymById = () => {
                           setEditRating("");
                           setEditComment("");
                         } catch (err: any) {
-                          console.error('Update review error:', err);
-                          const serverMsg = err?.response?.data || err?.message || err;
-                          alert(serverMsg?.error || serverMsg?.message || JSON.stringify(serverMsg) || 'Failed to update review');
+                          console.error("Update review error:", err);
+                          const serverMsg =
+                            err?.response?.data || err?.message || err;
+                          alert(
+                            serverMsg?.error ||
+                              serverMsg?.message ||
+                              JSON.stringify(serverMsg) ||
+                              "Failed to update review",
+                          );
                         }
                       }}
                     >
