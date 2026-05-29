@@ -144,28 +144,68 @@
 }
 .vg-summary-box {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
   border: 1px solid #eef2f6;
   border-radius: 10px;
-  padding: 14px;
+  padding: 18px;
   margin: 18px 0;
+  align-items: start;
+  background: #fbfdff;
 }
 .summary-col {
   padding: 6px 8px;
 }
+.summary-features-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .summary-title {
   font-weight: 700;
   margin-bottom: 8px;
+  color: #374151;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.6px;
 }
 .summary-line {
   display: flex;
   justify-content: space-between;
   color: #374151;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 .summary-features {
   color: #374151;
+  line-height: 1.6;
+}
+
+.feature-chip {
+  display: inline-block;
+  background: #f1f7ff;
+  color: #0f172a;
+  padding: 6px 10px;
+  border-radius: 999px;
+  margin: 6px 8px 6px 0;
+  font-size: 13px;
+  border: 1px solid #e6f0ff;
+}
+
+.summary-title {
+  display: block;
+  text-align: center;
+}
+
+.summary-col .summary-line > div:first-child {
+  text-align: left;
+}
+.summary-col .summary-line > div:last-child {
+  text-align: right;
+  color: #374151;
+}
+
+.vg-summary-box {
+  gap: 24px;
 }
 .vg-reviews {
   list-style: none;

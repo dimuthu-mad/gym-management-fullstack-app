@@ -24,6 +24,7 @@ const formatReview = (review) => ({
   user: review.user?.name || review.user?.email || "Unknown user",
   rating: review.rating,
   comment: review.comment,
+  createdAt: review.createdAt ? review.createdAt.toISOString() : undefined,
 });
 
 // Protected route

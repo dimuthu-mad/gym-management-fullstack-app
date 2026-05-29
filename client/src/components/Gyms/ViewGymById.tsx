@@ -80,6 +80,15 @@ const ViewGymById = () => {
 
   const avatarColors = ["#E6F6EE", "#F6E6FA", "#FFF5E6", "#E8F3FF"];
 
+  const features = [
+    "WiFi",
+    "Showers",
+    "Parking",
+    "Locker Rooms",
+    "Sauna",
+    "24/7 Access",
+  ];
+
   const renderStars = (n: number) => {
     const full = Math.round(n);
     return Array.from({ length: 5 }).map((_, i) => (
@@ -178,15 +187,15 @@ const ViewGymById = () => {
               <div>08:00 - 20:00</div>
             </div>
           </div>
-          <div className="summary-col">
+          <div className="summary-col summary-features-col">
             <div className="summary-title">Features</div>
             <div className="summary-features">
-              WiFi • Showers • Parking • Locker Rooms • Sauna • 24/7 Access
+              {features.map((f) => (
+                <span key={f} className="feature-chip">
+                  {f}
+                </span>
+              ))}
             </div>
-          </div>
-          <div className="summary-col">
-            <div className="summary-title">Added</div>
-            <div>{addedDate}</div>
           </div>
         </div>
 
