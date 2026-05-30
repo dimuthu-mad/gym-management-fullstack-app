@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Main from "./Layout/Main";
 import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
@@ -24,7 +25,11 @@ const router = createBrowserRouter([
       },
       {
         path: "profile",
-        element: <Profile />,
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "gyms",
@@ -32,7 +37,11 @@ const router = createBrowserRouter([
       },
       {
         path: "gyms/create",
-        element: <CreateGym />,
+        element: (
+          <ProtectedRoute>
+            <CreateGym />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "gyms/:id",
@@ -40,15 +49,27 @@ const router = createBrowserRouter([
       },
       {
         path: "gyms/:id/reviews",
-        element: <CreateReview />,
+        element: (
+          <ProtectedRoute>
+            <CreateReview />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "gyms/:id/schedules",
-        element: <Schedule />,
+        element: (
+          <ProtectedRoute>
+            <Schedule />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "schedules",
-        element: <Schedule />,
+        element: (
+          <ProtectedRoute>
+            <Schedule />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

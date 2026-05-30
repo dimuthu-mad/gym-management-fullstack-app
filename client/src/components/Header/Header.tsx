@@ -57,54 +57,60 @@ const Header = () => {
               Gyms
             </NavLink>
 
-            <NavLink
-              to="/schedules"
-              className={({ isActive }) =>
-                `nav-link ${isActive ? "nav-link-active" : ""}`
-              }
-            >
-              Schedules
-            </NavLink>
-
-            <NavLink
-              to="/gyms/create"
-              className={({ isActive }) =>
-                `nav-link ${isActive ? "nav-link-active" : ""}`
-              }
-            >
-              Create Gym
-            </NavLink>
-
-            <NavLink
-              to="/profile"
-              className={({ isActive }) =>
-                `nav-link nav-link-icon ${isActive ? "nav-link-active" : ""}`
-              }
-              aria-label="Profile"
-              title="Profile"
-            >
-              <svg
-                className="nav-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
+            {isAuthenticated && (
+              <NavLink
+                to="/schedules"
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? "nav-link-active" : ""}`
+                }
               >
-                <path
-                  d="M20 21a8 8 0 0 0-16 0"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                />
-                <circle
-                  cx="12"
-                  cy="8"
-                  r="4"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                />
-              </svg>
-              <span className="sr-only">Profile</span>
-            </NavLink>
+                Schedules
+              </NavLink>
+            )}
+
+            {isAuthenticated && (
+              <NavLink
+                to="/gyms/create"
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? "nav-link-active" : ""}`
+                }
+              >
+                Create Gym
+              </NavLink>
+            )}
+
+            {isAuthenticated && (
+              <NavLink
+                to="/profile"
+                className={({ isActive }) =>
+                  `nav-link nav-link-icon ${isActive ? "nav-link-active" : ""}`
+                }
+                aria-label="Profile"
+                title="Profile"
+              >
+                <svg
+                  className="nav-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M20 21a8 8 0 0 0-16 0"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
+                  <circle
+                    cx="12"
+                    cy="8"
+                    r="4"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  />
+                </svg>
+                <span className="sr-only">Profile</span>
+              </NavLink>
+            )}
           </nav>
 
           <div className="header-actions">
@@ -182,15 +188,17 @@ const Header = () => {
               Gyms
             </NavLink>
 
-            <NavLink
-              to="/schedules"
-              onClick={() => setMenuOpen(false)}
-              className={({ isActive }) =>
-                `mobile-link ${isActive ? "mobile-link-active" : ""}`
-              }
-            >
-              Schedules
-            </NavLink>
+            {isAuthenticated && (
+              <NavLink
+                to="/schedules"
+                onClick={() => setMenuOpen(false)}
+                className={({ isActive }) =>
+                  `mobile-link ${isActive ? "mobile-link-active" : ""}`
+                }
+              >
+                Schedules
+              </NavLink>
+            )}
 
             <NavLink
               to="/gyms/create"
