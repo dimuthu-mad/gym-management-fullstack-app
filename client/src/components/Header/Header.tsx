@@ -7,16 +7,19 @@ const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [checking, setChecking] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const check = async () => {
       try {
-        await axios.get("http://localhost:3000/profile", {
+        const response = await axios.get("http://localhost:3000/profile", {
           withCredentials: true,
         });
         setIsAuthenticated(true);
+        setIsAdmin(response.data.role === "ADMIN");
       } catch {
         setIsAuthenticated(false);
+        setIsAdmin(false);
       } finally {
         setChecking(false);
       }
@@ -68,7 +71,7 @@ const Header = () => {
               </NavLink>
             )}
 
-            {isAuthenticated && (
+            {isAuthenticated && isAdmin && (
               <NavLink
                 to="/gyms/create"
                 className={({ isActive }) =>
@@ -200,15 +203,17 @@ const Header = () => {
               </NavLink>
             )}
 
-            <NavLink
-              to="/gyms/create"
-              onClick={() => setMenuOpen(false)}
-              className={({ isActive }) =>
-                `mobile-link ${isActive ? "mobile-link-active" : ""}`
-              }
-            >
-              Create Gym
-            </NavLink>
+            {isAuthenticated && isAdmin && (
+              <NavLink
+                to="/gyms/create"
+                onClick={() => setMenuOpen(false)}
+                className={({ isActive }) =>
+                  `mobile-link ${isActive ? "mobile-link-active" : ""}`
+                }
+              >
+                Create Gym
+              </NavLink>
+            )}
 
             <NavLink
               to="/profile"
