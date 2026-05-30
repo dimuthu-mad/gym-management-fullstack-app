@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./ViewGymById.css";
 
 type Review = {
@@ -24,6 +25,7 @@ type GymDetails = {
 };
 
 const ViewGymById = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [gym, setGym] = useState<GymDetails | null>(null);
   const [loading, setLoading] = useState(true);
@@ -167,12 +169,12 @@ const ViewGymById = () => {
               >
                 Write Review
               </button>
-              <Link
-                to={`/gyms/${gym.id}/schedules`}
-                className="vg-write-btn vg-schedule-btn"
+              <button
+                className="vg-write-btn"
+                onClick={() => navigate(`/gyms/${gym.id}/schedules`)}
               >
-                Schedule Workout
-              </Link>
+                Create Schedule
+              </button>
             </div>
           </div>
         </div>
