@@ -12,6 +12,7 @@ const CreateGym = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [authChecking, setAuthChecking] = useState(true);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -19,12 +20,14 @@ const CreateGym = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        await axios.get("http://localhost:3000/profile", {
+        const res = await axios.get("http://localhost:3000/profile", {
           withCredentials: true,
         });
         setIsAuthenticated(true);
+        setIsAdmin(res?.data?.role === "ADMIN");
       } catch {
         setIsAuthenticated(false);
+        setIsAdmin(false);
       } finally {
         setAuthChecking(false);
       }
@@ -65,9 +68,11 @@ const CreateGym = () => {
       navigate("/gyms");
     } catch (err: any) {
       const status = err?.response?.status;
-      if (status === 401 || status === 403) {
+      if (status === 401) {
         setIsAuthenticated(false);
         setError("You must be logged in to create a gym.");
+      } else if (status === 403) {
+        setError(err?.response?.data?.error || "Admin access required");
       } else {
         setError(err?.response?.data?.error || "Failed to create gym");
       }
@@ -100,6 +105,16 @@ const CreateGym = () => {
               >
                 Sign in
               </a>
+              <Link className="cg-btn cg-btn-ghost" to="/gyms">
+                Back to gyms
+              </Link>
+            </div>
+          </div>
+        ) : !isAdmin ? (
+          <div className="cg-signin">
+            <h3>Admin access required</h3>
+            <p>You must be an admin to create a gym.</p>
+            <div className="cg-actions">
               <Link className="cg-btn cg-btn-ghost" to="/gyms">
                 Back to gyms
               </Link>

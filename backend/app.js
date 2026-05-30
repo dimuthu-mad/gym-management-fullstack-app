@@ -224,6 +224,17 @@ app.post("/gyms", requiresAuth(), async (req, res) => {
         ? null
         : String(rawImageUrl).trim();
 
+    const profile = req.oidc?.user;
+    if (!profile?.sub) {
+      return res
+        .status(401)
+        .json({ error: "Authenticated user profile is required" });
+    }
+    const currentUser = await ensureUserFromProfile(profile, "USER");
+    if (currentUser.role !== "ADMIN") {
+      return res.status(403).json({ error: "Admin access required" });
+    }
+
     if (!name || !location) {
       return res.status(400).json({ error: "Name and location are required" });
     }

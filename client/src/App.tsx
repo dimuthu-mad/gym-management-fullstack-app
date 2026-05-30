@@ -38,7 +38,7 @@ const router = createBrowserRouter([
       {
         path: "gyms/create",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requiredRole="ADMIN">
             <CreateGym />
           </ProtectedRoute>
         ),
