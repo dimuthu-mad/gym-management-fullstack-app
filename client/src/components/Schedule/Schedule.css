@@ -113,9 +113,133 @@
   font-size: 0.95rem;
 }
 
+.schedule-picker-wrapper {
+  width: 100%;
+}
+
+.schedule-picker-button {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #d6dee8;
+  border-radius: 14px;
+  background: #fff;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  color: #0f172a;
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.schedule-picker-button:hover {
+  border-color: #0f8f86;
+}
+
+.schedule-picker-button:focus-visible {
+  outline: none;
+  border-color: #0f8f86;
+  box-shadow: 0 0 0 3px rgba(15, 143, 134, 0.12);
+}
+
+.schedule-picker-text {
+  text-align: left;
+}
+
+.schedule-picker-text.is-placeholder {
+  color: #94a3b8;
+}
+
+.schedule-picker-icon {
+  color: #0f8f86;
+  flex-shrink: 0;
+}
+
+.schedule-time-picker {
+  position: relative;
+  width: 100%;
+}
+
+.schedule-time-button {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #d6dee8;
+  border-radius: 14px;
+  background: #fff;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  color: #0f172a;
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.schedule-time-button:hover {
+  border-color: #0f8f86;
+}
+
+.schedule-time-button:focus-visible {
+  outline: none;
+  border-color: #0f8f86;
+  box-shadow: 0 0 0 3px rgba(15, 143, 134, 0.12);
+}
+
+.schedule-time-button-text.is-placeholder {
+  color: #94a3b8;
+}
+
+.schedule-time-button-icon {
+  color: #0f8f86;
+}
+
+.schedule-time-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 20;
+  max-height: 240px;
+  overflow: auto;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #fff;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+  padding: 8px;
+}
+
+.schedule-time-option {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 10px 12px;
+  text-align: left;
+  border-radius: 12px;
+  cursor: pointer;
+  color: #0f172a;
+  font: inherit;
+  font-size: 0.92rem;
+}
+
+.schedule-time-option:hover,
+.schedule-time-option.is-active {
+  background: #eefaf8;
+  color: #0f8f86;
+}
+
 .schedule-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.schedule-edit-row {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr;
   gap: 12px;
 }
 
@@ -256,7 +380,57 @@
     grid-template-columns: 1fr;
   }
 
+  .schedule-edit-row {
+    grid-template-columns: 1fr;
+  }
+
   .vg-schedule-btn {
     margin-left: 0;
   }
+}
+
+.react-datepicker {
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+  font-family: inherit;
+}
+
+.react-datepicker__header {
+  background: linear-gradient(180deg, #f8fbfd 0%, #eef6f8 100%);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker-year-header {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day,
+.react-datepicker__time-name {
+  width: 2rem;
+  line-height: 2rem;
+  margin: 0.12rem;
+  font-size: 0.82rem;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected,
+.react-datepicker__time-list-item--selected {
+  background-color: #0f8f86 !important;
+  color: #fff !important;
+}
+
+.react-datepicker__navigation-icon::before {
+  border-color: #0f172a;
+}
+
+.react-datepicker__time-list {
+  max-height: 220px;
 }

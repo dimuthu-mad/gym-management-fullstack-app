@@ -1,6 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import "./Schedule.css";
 
 type Gym = {
@@ -51,7 +59,136 @@ const toTimeInput = (value: string) => {
   return dt.toISOString().slice(11, 16);
 };
 
-const buildDateTime = (date: string, time: string) => `${date}T${time}:00`;
+const parseDateOnly = (value: string) => {
+  const [year, month, day] = toDateInput(value).split("-").map(Number);
+  if (!year || !month || !day) return null;
+  const parsed = new Date(year, month - 1, day);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
+const parseDateTime = (value: string) => {
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
+const buildDateOnly = (date: Date | null) => {
+  if (!date) return "";
+  const copy = new Date(date);
+  copy.setHours(0, 0, 0, 0);
+  return copy.toISOString();
+};
+
+const buildDateTime = (date: Date | null, time: Date | null) => {
+  if (!date || !time) return "";
+  const combined = new Date(date);
+  combined.setHours(time.getHours(), time.getMinutes(), 0, 0);
+  return combined.toISOString();
+};
+
+const timeLabel = (value: Date | null) => {
+  if (!value) return "Select time";
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(value);
+};
+
+const timeOptions = Array.from({ length: 96 }, (_, index) => {
+  const totalMinutes = index * 15;
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  const label = new Date(2000, 0, 1, hours, minutes).toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+  return {
+    value: new Date(2000, 0, 1, hours, minutes),
+    label,
+  };
+});
+
+type PickerInputProps = {
+  value?: string;
+  onClick?: () => void;
+  placeholder: string;
+  icon: ReactNode;
+};
+
+const PickerInput = forwardRef<HTMLButtonElement, PickerInputProps>(
+  ({ value, onClick, placeholder, icon }, ref) => (
+    <button
+      type="button"
+      className="schedule-picker-button"
+      onClick={onClick}
+      ref={ref}
+    >
+      <span className={`schedule-picker-text ${value ? "" : "is-placeholder"}`}>
+        {value || placeholder}
+      </span>
+      <span className="schedule-picker-icon" aria-hidden="true">
+        {icon}
+      </span>
+    </button>
+  ),
+);
+
+PickerInput.displayName = "PickerInput";
+
+type TimePickerProps = {
+  label: string;
+  value: Date | null;
+  open: boolean;
+  onToggle: () => void;
+  onSelect: (next: Date) => void;
+};
+
+const TimePicker = ({
+  label,
+  value,
+  open,
+  onToggle,
+  onSelect,
+}: TimePickerProps) => {
+  return (
+    <div className="schedule-time-picker">
+      <button
+        type="button"
+        className="schedule-time-button"
+        onClick={onToggle}
+        aria-expanded={open}
+      >
+        <span
+          className={`schedule-time-button-text ${value ? "" : "is-placeholder"}`}
+        >
+          {value ? timeLabel(value) : label}
+        </span>
+        <span className="schedule-time-button-icon" aria-hidden="true">
+          ⏰
+        </span>
+      </button>
+
+      {open && (
+        <div className="schedule-time-menu" role="listbox" aria-label={label}>
+          {timeOptions.map((option) => {
+            const isSelected =
+              value?.getHours() === option.value.getHours() &&
+              value?.getMinutes() === option.value.getMinutes();
+            return (
+              <button
+                key={option.label}
+                type="button"
+                className={`schedule-time-option ${isSelected ? "is-active" : ""}`}
+                onClick={() => onSelect(option.value)}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const SchedulePage = () => {
   const { id } = useParams();
@@ -64,16 +201,17 @@ const SchedulePage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [openTimePicker, setOpenTimePicker] = useState<string | null>(null);
   const [selectedGymId, setSelectedGymId] = useState<string>("");
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+  const [date, setDate] = useState<Date | null>(null);
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [endTime, setEndTime] = useState<Date | null>(null);
   const [notes, setNotes] = useState("");
   const [editTitle, setEditTitle] = useState("");
-  const [editDate, setEditDate] = useState("");
-  const [editStartTime, setEditStartTime] = useState("");
-  const [editEndTime, setEditEndTime] = useState("");
+  const [editDate, setEditDate] = useState<Date | null>(null);
+  const [editStartTime, setEditStartTime] = useState<Date | null>(null);
+  const [editEndTime, setEditEndTime] = useState<Date | null>(null);
 
   const isAdmin = profile?.role === "ADMIN";
   const visibleSchedules = useMemo(() => schedules, [schedules]);
@@ -133,30 +271,44 @@ const SchedulePage = () => {
 
   const resetForm = () => {
     setTitle("");
-    setDate("");
-    setStartTime("");
-    setEndTime("");
+    setDate(null);
+    setStartTime(null);
+    setEndTime(null);
     setNotes("");
   };
 
   const startEditing = (schedule: Schedule) => {
     setEditingId(schedule.id);
     setEditTitle(schedule.title);
-    setEditDate(toDateInput(schedule.date));
-    setEditStartTime(toTimeInput(schedule.startTime));
-    setEditEndTime(toTimeInput(schedule.endTime));
+    setEditDate(parseDateOnly(schedule.date));
+    setEditStartTime(parseDateTime(schedule.startTime));
+    setEditEndTime(parseDateTime(schedule.endTime));
   };
 
   const stopEditing = () => {
     setEditingId(null);
     setEditTitle("");
-    setEditDate("");
-    setEditStartTime("");
-    setEditEndTime("");
+    setEditDate(null);
+    setEditStartTime(null);
+    setEditEndTime(null);
+    setOpenTimePicker(null);
+  };
+
+  const toggleTimePicker = (key: string) => {
+    setOpenTimePicker((current) => (current === key ? null : key));
+  };
+
+  const pickTime = (key: string, value: Date) => {
+    if (key === "create-start") setStartTime(value);
+    if (key === "create-end") setEndTime(value);
+    if (key === "edit-start") setEditStartTime(value);
+    if (key === "edit-end") setEditEndTime(value);
+    setOpenTimePicker(null);
   };
 
   const submitCreate = async (event: React.FormEvent) => {
     event.preventDefault();
+    setOpenTimePicker(null);
     const gymToUse = Number(fallbackSelectedGymId);
     if (!gymToUse || !title || !date || !startTime || !endTime) {
       alert("Pick a gym and fill all required fields.");
@@ -168,7 +320,7 @@ const SchedulePage = () => {
         `http://localhost:3000/gyms/${gymToUse}/schedules`,
         {
           title,
-          date: buildDateTime(date, startTime),
+          date: buildDateOnly(date),
           startTime: buildDateTime(date, startTime),
           endTime: buildDateTime(date, endTime),
           notes,
@@ -193,6 +345,7 @@ const SchedulePage = () => {
 
   const submitEdit = async (event: React.FormEvent, scheduleId: number) => {
     event.preventDefault();
+    setOpenTimePicker(null);
     if (!editTitle || !editDate || !editStartTime || !editEndTime) {
       alert("Fill all schedule fields.");
       return;
@@ -203,7 +356,7 @@ const SchedulePage = () => {
         `http://localhost:3000/schedules/${scheduleId}`,
         {
           title: editTitle,
-          date: buildDateTime(editDate, editStartTime),
+          date: buildDateOnly(editDate),
           startTime: buildDateTime(editDate, editStartTime),
           endTime: buildDateTime(editDate, editEndTime),
         },
@@ -311,29 +464,41 @@ const SchedulePage = () => {
 
             <label className="schedule-field">
               Date
-              <input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
+              <DatePicker
+                selected={date}
+                onChange={(value) => setDate(value)}
+                customInput={
+                  <PickerInput placeholder="Select date" icon="📅" />
+                }
+                placeholderText="Select date"
+                dateFormat="M/d/yyyy"
+                calendarStartDay={0}
+                popperPlacement="bottom-start"
+                showPopperArrow={false}
+                wrapperClassName="schedule-picker-wrapper"
               />
             </label>
 
             <div className="schedule-row">
               <label className="schedule-field">
                 Start Time
-                <input
-                  type="time"
+                <TimePicker
+                  label="Select time"
                   value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
+                  open={openTimePicker === "create-start"}
+                  onToggle={() => toggleTimePicker("create-start")}
+                  onSelect={(value) => pickTime("create-start", value)}
                 />
               </label>
 
               <label className="schedule-field">
                 End Time
-                <input
-                  type="time"
+                <TimePicker
+                  label="Select time"
                   value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
+                  open={openTimePicker === "create-end"}
+                  onToggle={() => toggleTimePicker("create-end")}
+                  onSelect={(value) => pickTime("create-end", value)}
                 />
               </label>
             </div>
@@ -414,21 +579,37 @@ const SchedulePage = () => {
                             value={editTitle}
                             onChange={(e) => setEditTitle(e.target.value)}
                           />
-                          <div className="schedule-row">
-                            <input
-                              type="date"
-                              value={editDate}
-                              onChange={(e) => setEditDate(e.target.value)}
+                          <div className="schedule-edit-row">
+                            <DatePicker
+                              selected={editDate}
+                              onChange={(value) => setEditDate(value)}
+                              customInput={
+                                <PickerInput
+                                  placeholder="Select date"
+                                  icon="📅"
+                                />
+                              }
+                              placeholderText="Select date"
+                              dateFormat="M/d/yyyy"
+                              popperPlacement="bottom-start"
+                              showPopperArrow={false}
+                              wrapperClassName="schedule-picker-wrapper"
                             />
-                            <input
-                              type="time"
+                            <TimePicker
+                              label="Select time"
                               value={editStartTime}
-                              onChange={(e) => setEditStartTime(e.target.value)}
+                              open={openTimePicker === "edit-start"}
+                              onToggle={() => toggleTimePicker("edit-start")}
+                              onSelect={(value) =>
+                                pickTime("edit-start", value)
+                              }
                             />
-                            <input
-                              type="time"
+                            <TimePicker
+                              label="Select time"
                               value={editEndTime}
-                              onChange={(e) => setEditEndTime(e.target.value)}
+                              open={openTimePicker === "edit-end"}
+                              onToggle={() => toggleTimePicker("edit-end")}
+                              onSelect={(value) => pickTime("edit-end", value)}
                             />
                           </div>
                           <div className="schedule-card-actions">
