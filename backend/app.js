@@ -218,6 +218,11 @@ app.post("/gyms", requiresAuth(), async (req, res) => {
       req.body.membershipPrice === undefined || req.body.membershipPrice === ""
         ? null
         : Number(req.body.membershipPrice);
+    const rawImageUrl = req.body.imageUrl;
+    const imageUrl =
+      rawImageUrl === undefined || rawImageUrl === ""
+        ? null
+        : String(rawImageUrl).trim();
 
     if (!name || !location) {
       return res.status(400).json({ error: "Name and location are required" });
@@ -230,7 +235,7 @@ app.post("/gyms", requiresAuth(), async (req, res) => {
         description: description || null,
         rating: Number.isNaN(rating) ? null : rating,
         membershipPrice: Number.isNaN(membershipPrice) ? null : membershipPrice,
-        imageUrl: null,
+        imageUrl,
       },
     });
 
