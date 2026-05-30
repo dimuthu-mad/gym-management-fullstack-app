@@ -7,6 +7,7 @@ import Gyms from "./components/Gyms/Gyms";
 import ViewGymById from "./components/Gyms/ViewGymById";
 import CreateGym from "./components/Gyms/CreateGym";
 import CreateReview from "./components/Reviews/CreateReview";
+import Schedule from "./components/Schedule/Schedule";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,14 @@ const router = createBrowserRouter([
       {
         path: "gyms/:id/reviews",
         element: <CreateReview />,
+      },
+      {
+        path: "gyms/:id/schedules",
+        element: <Schedule />,
+      },
+      {
+        path: "schedules",
+        element: <Schedule />,
       },
     ],
   },

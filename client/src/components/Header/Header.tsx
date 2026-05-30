@@ -58,6 +58,15 @@ const Header = () => {
             </NavLink>
 
             <NavLink
+              to="/schedules"
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "nav-link-active" : ""}`
+              }
+            >
+              Schedules
+            </NavLink>
+
+            <NavLink
               to="/gyms/create"
               className={({ isActive }) =>
                 `nav-link ${isActive ? "nav-link-active" : ""}`
@@ -171,6 +180,16 @@ const Header = () => {
               }
             >
               Gyms
+            </NavLink>
+
+            <NavLink
+              to="/schedules"
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) =>
+                `mobile-link ${isActive ? "mobile-link-active" : ""}`
+              }
+            >
+              Schedules
             </NavLink>
 
             <NavLink

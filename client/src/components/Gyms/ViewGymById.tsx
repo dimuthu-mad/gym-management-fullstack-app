@@ -167,6 +167,12 @@ const ViewGymById = () => {
               >
                 Write Review
               </button>
+              <Link
+                to={`/gyms/${gym.id}/schedules`}
+                className="vg-write-btn vg-schedule-btn"
+              >
+                Schedule Workout
+              </Link>
             </div>
           </div>
         </div>
