@@ -276,6 +276,162 @@ const getGymReviewsCount = async (req, res) => {
   }
 };
 
+//Create schedule for logged-in user
+app.post("/gyms/:id/schedules", requiresAuth(), async (req, res) => {
+  try {
+    const gymId = Number(req.params.id);
+    const { title, date, startTime, endTime } = req.body;
+
+    const auth0Id = req.oidc.user.sub;
+    const dbUser = await prisma.user.findUnique({
+      where: { auth0Id },
+    });
+    if (!dbUser) {
+      return res.status(401).json({ error: "User not found" });
+    }
+
+    const gym = await prisma.gym.findUnique({
+      where: { id: gymId },
+    });
+
+    if (!gym) {
+      return res.status(404).json({ error: "Gym not found" });
+    }
+
+    const schedule = await prisma.schedule.create({
+      data: {
+        title,
+        date: new Date(date),
+        startTime: new Date(startTime),
+        endTime: new Date(endTime),
+        userId: dbUser.id,
+        gymId: gym.id,
+      },
+    });
+
+    res.status(201).json(schedule);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create schedule" });
+  }
+});
+
+//Get only my schedules
+app.get("/my-schedules", requiresAuth(), async (req, res) => {
+  try {
+    const auth0Id = req.oidc.user.sub;
+    const dbUser = await prisma.user.findUnique({
+      where: { auth0Id },
+    });
+    if (!dbUser) {
+      return res.status(401).json({ error: "User not found" });
+    }
+
+    const schedules = await prisma.schedule.findMany({
+      where: { userId: dbUser.id },
+      include: { gym: true },
+      orderBy: { date: "asc" },
+    });
+    res.json(schedules);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to load schedules" });
+  }
+});
+
+//Admin can see all schedules
+app.get("/schedules", requiresAuth(), async (req, res) => {
+  try {
+    const auth0Id = req.oidc.user.sub;
+    const dbUser = await prisma.user.findUnique({
+      where: { auth0Id },
+    });
+    if (!dbUser || dbUser.role !== "ADMIN") {
+      return res.status(403).json({ error: "Admin access required" });
+    }
+    const schedules = await prisma.schedule.findMany({
+      include: {
+        gym: true,
+        user: { select: { id: true, name: true, email: true } },
+      },
+      orderBy: { date: "asc" },
+    });
+    res.json(schedules);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to load schedules" });
+  }
+});
+
+//Update schedule: owner or admin only
+app.patch("/schedules/:id", requiresAuth(), async (req, res) => {
+  try {
+    const scheduleId = Number(req.params.id);
+    const { title, date, startTime, endTime } = req.body;
+
+    const auth0Id = req.oidc.user.sub;
+    const dbUser = await prisma.user.findUnique({
+      where: { auth0Id },
+    });
+    if (!dbUser) {
+      return res.status(401).json({ error: "User not found" });
+    }
+    const schedule = await prisma.schedule.findUnique({
+      where: { id: scheduleId },
+    });
+    if (!schedule) {
+      return res.status(404).json({ error: "Schedule not found" });
+    }
+    if (schedule.userId !== dbUser.id && dbUser.role !== "ADMIN") {
+      return res.status(403).json({
+        error: "You can update only your own schedule",
+      });
+    }
+
+    const updatedSchedule = await prisma.schedule.update({
+      where: { id: scheduleId },
+      data: {
+        title,
+        date: new Date(date),
+        startTime: new Date(startTime),
+        endTime: new Date(endTime),
+      },
+    });
+
+    res.json(updatedSchedule);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update schedule" });
+  }
+});
+
+//Delete schedule: owner or admin only
+app.delete("/schedules/:id", requiresAuth(), async (req, res) => {
+  try {
+    const scheduleId = Number(req.params.id);
+    const auth0Id = req.oidc.user.sub;
+    const dbUser = await prisma.user.findUnique({
+      where: { auth0Id },
+    });
+    const schedule = await prisma.schedule.findUnique({
+      where: { id: scheduleId },
+    });
+    if (!schedule) {
+      return res.status(404).json({ error: "Schedule not found" });
+    }
+
+    if (schedule.userId !== dbUser.id && dbUser.role !== "ADMIN") {
+      return res.status(403).json({
+        error: "You can delete only your own schedule",
+      });
+    }
+
+    await prisma.schedule.delete({
+      where: { id: scheduleId },
+    });
+
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete schedule" });
+  }
+});
+
 // Support both spellings to avoid frontend/backend mismatch.
 app.get("/gyms/:id/reviewcount", getGymReviewsCount);
 app.get("/gyms/:id/reviewscount", getGymReviewsCount);
