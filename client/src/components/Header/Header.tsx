@@ -117,10 +117,6 @@ const Header = () => {
           </nav>
 
           <div className="header-actions">
-            <span className="region-pill" aria-label="Region">
-              Sweden
-            </span>
-
             {checking ? (
               <span className="auth-skeleton" aria-hidden="true" />
             ) : isAuthenticated ? (
@@ -248,10 +244,6 @@ const Header = () => {
           </nav>
 
           <div className="mobile-meta">
-            <span className="region-pill" aria-label="Region">
-              Sweden
-            </span>
-
             {checking ? (
               <span className="auth-skeleton" aria-hidden="true" />
             ) : isAuthenticated ? (
