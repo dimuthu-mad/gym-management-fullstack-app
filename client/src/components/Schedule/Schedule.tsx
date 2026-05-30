@@ -157,7 +157,28 @@ const TimePicker = ({
           {value ? timeLabel(value) : label}
         </span>
         <span className="schedule-time-button-icon" aria-hidden="true">
-          ⏰
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+              stroke="currentColor"
+              strokeWidth="1.2"
+            />
+            <path
+              d="M12 7v5l4 2"
+              stroke="currentColor"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </span>
       </button>
 
@@ -462,7 +483,35 @@ const SchedulePage = () => {
                 selected={date}
                 onChange={(value: Date | null) => setDate(value)}
                 customInput={
-                  <PickerInput placeholder="Select date" icon="📅" />
+                  <PickerInput
+                    placeholder="Select date"
+                    icon={
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="3"
+                          y="4"
+                          width="18"
+                          height="18"
+                          rx="2"
+                          stroke="currentColor"
+                          strokeWidth="1.2"
+                        />
+                        <path
+                          d="M16 2v4M8 2v4M3 10h18"
+                          stroke="currentColor"
+                          strokeWidth="1.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    }
+                  />
                 }
                 placeholderText="Select date"
                 dateFormat="M/d/yyyy"
@@ -582,7 +631,32 @@ const SchedulePage = () => {
                               customInput={
                                 <PickerInput
                                   placeholder="Select date"
-                                  icon="📅"
+                                  icon={
+                                    <svg
+                                      width="18"
+                                      height="18"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <rect
+                                        x="3"
+                                        y="4"
+                                        width="18"
+                                        height="18"
+                                        rx="2"
+                                        stroke="currentColor"
+                                        strokeWidth="1.2"
+                                      />
+                                      <path
+                                        d="M16 2v4M8 2v4M3 10h18"
+                                        stroke="currentColor"
+                                        strokeWidth="1.2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                    </svg>
+                                  }
                                 />
                               }
                               placeholderText="Select date"
@@ -630,15 +704,61 @@ const SchedulePage = () => {
                           <div className="schedule-title">{schedule.title}</div>
                           <div className="schedule-time-row">
                             <span>
-                              📅 {new Date(schedule.date).toLocaleDateString()}
+                              <svg
+                                className="schedule-inline-icon"
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <rect
+                                  x="3"
+                                  y="4"
+                                  width="18"
+                                  height="18"
+                                  rx="2"
+                                  stroke="currentColor"
+                                  strokeWidth="1.2"
+                                />
+                                <path
+                                  d="M3 10h18"
+                                  stroke="currentColor"
+                                  strokeWidth="1.2"
+                                  strokeLinecap="round"
+                                />
+                              </svg>{" "}
+                              {new Date(schedule.date).toLocaleDateString()}
                             </span>
                             <span>
-                              ⏰{" "}
+                              <svg
+                                className="schedule-inline-icon"
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <circle
+                                  cx="12"
+                                  cy="12"
+                                  r="9"
+                                  stroke="currentColor"
+                                  strokeWidth="1.2"
+                                />
+                                <path
+                                  d="M12 7v5l4 2"
+                                  stroke="currentColor"
+                                  strokeWidth="1.2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>{" "}
                               {new Date(schedule.startTime).toLocaleTimeString(
                                 [],
                                 { hour: "2-digit", minute: "2-digit" },
-                              )}{" "}
-                              -{" "}
+                              )}
+                              {" - "}
                               {new Date(schedule.endTime).toLocaleTimeString(
                                 [],
                                 { hour: "2-digit", minute: "2-digit" },
