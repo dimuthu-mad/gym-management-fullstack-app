@@ -1,56 +1,68 @@
 .schedule-page-shell {
   min-height: calc(100vh - 88px);
-  padding: 20px;
-  background: linear-gradient(180deg, #f8fbfd 0%, #eef6f8 100%);
+  padding: 32px 24px;
+  background: #f7f9fb;
 }
 
 .schedule-layout {
   display: grid;
-  grid-template-columns: 1.05fr 1.35fr;
-  gap: 20px;
+  grid-template-columns: 1fr 0.95fr;
+  gap: 24px;
   align-items: start;
 }
 
+/* limit overall layout width so panels are narrower and centered */
+.schedule-layout {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
 .schedule-panel {
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 24px;
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
-  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #edf2f3;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(40, 60, 80, 0.06);
+  padding: 28px 32px;
 }
 
 .schedule-back-link {
-  display: inline-flex;
-  align-items: center;
+  display: block;
+  /* align-items: left !important; */
+  text-align: left !important;
   gap: 8px;
-  color: #0f172a;
+  color: #0a8b7f;
   text-decoration: none;
   font-weight: 600;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
+  font-size: 0.92rem;
 }
 
 .schedule-panel-head h1,
 .schedule-panel-head h2 {
   margin: 0;
-  color: #0f172a;
-  font-size: 1.65rem;
+  color: #0b2330;
+  font-size: 29px;
   line-height: 1.15;
+  text-align: center;
+  font-weight: 500;
 }
 
 .schedule-panel-head p {
   margin: 6px 0 0;
-  color: #64748b;
-  font-size: 0.92rem;
+  color: #667581;
+  font-size: 0.82rem;
+  text-align: center;
 }
 
 .schedule-gym-card {
   display: flex;
   gap: 14px;
   align-items: center;
-  background: #f8fafc;
-  border-radius: 18px;
+  background: #fbfbfd;
+  border-radius: 10px;
   padding: 10px;
   margin: 16px 0;
+  border: 1px solid #e6eef0;
 }
 
 .schedule-gym-image,
@@ -61,15 +73,15 @@
 }
 
 .schedule-gym-image {
-  width: 96px;
-  height: 76px;
+  width: 92px;
+  height: 72px;
 }
 
 .schedule-gym-name,
 .schedule-title,
 .schedule-card-main h3 {
-  font-weight: 800;
-  color: #0f172a;
+  font-weight: 400;
+  color: #0b2330;
 }
 
 .schedule-gym-name,
@@ -81,8 +93,8 @@
 .schedule-meta,
 .schedule-owner,
 .schedule-time-row {
-  color: #64748b;
-  font-size: 0.9rem;
+  color: #667581;
+  font-size: 0.82rem;
 }
 
 .schedule-form,
@@ -91,12 +103,16 @@
   gap: 14px;
 }
 
+.schedule-form label {
+  text-align: left;
+}
+
 .schedule-field {
   display: grid;
   gap: 6px;
-  color: #0f172a;
+  color: #123;
   font-weight: 600;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
 }
 
 .schedule-field input,
@@ -104,13 +120,13 @@
 .schedule-field textarea,
 .schedule-edit-form input {
   width: auto;
-  border: 1px solid #d6dee8;
-  border-radius: 14px;
-  padding: 10px 12px;
+  border: 1px solid #e6eef0;
+  border-radius: 10px;
+  padding: 12px 14px;
   font: inherit;
-  background: #fff;
-  color: #0f172a;
-  font-size: 0.95rem;
+  background: #fbfbfd;
+  color: #123;
+  font-size: 0.88rem;
 }
 
 .schedule-picker-wrapper {
@@ -120,18 +136,18 @@
 .schedule-picker-button {
   width: 100%;
   min-height: 44px;
-  border: 1px solid #d6dee8;
-  border-radius: 14px;
-  background: #fff;
-  padding: 10px 12px;
+  border: 1px solid #e6eef0;
+  border-radius: 10px;
+  background: #fbfbfd;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   cursor: pointer;
-  color: #0f172a;
+  color: #123;
   font: inherit;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
 }
 
 .schedule-picker-button:hover {
@@ -165,18 +181,18 @@
 .schedule-time-button {
   width: 100%;
   min-height: 44px;
-  border: 1px solid #d6dee8;
-  border-radius: 14px;
-  background: #fff;
-  padding: 10px 12px;
+  border: 1px solid #e6eef0;
+  border-radius: 10px;
+  background: #fbfbfd;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   cursor: pointer;
-  color: #0f172a;
+  color: #123;
   font: inherit;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
 }
 
 .schedule-time-button:hover {
@@ -205,10 +221,10 @@
   z-index: 20;
   max-height: 240px;
   overflow: auto;
-  border-radius: 16px;
-  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 12px;
+  border: 1px solid #e6eef0;
   background: #fff;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+  box-shadow: 0 18px 40px rgba(40, 60, 80, 0.12);
   padding: 8px;
 }
 
@@ -218,11 +234,11 @@
   background: transparent;
   padding: 10px 12px;
   text-align: left;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
-  color: #0f172a;
+  color: #123;
   font: inherit;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
 }
 
 .schedule-time-option:hover,
@@ -257,24 +273,25 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
+  border-radius: 8px;
   padding: 10px 16px;
   font-weight: 700;
   text-decoration: none;
   border: 1px solid transparent;
   cursor: pointer;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
 }
 
 .schedule-primary-btn {
-  background: linear-gradient(180deg, #2fb7a4, #0f8f86);
+  background: linear-gradient(90deg, #0a8b7f, #0c9b86);
   color: #fff;
+  box-shadow: 0 6px 18px rgba(10, 139, 127, 0.14);
 }
 
 .schedule-secondary-btn {
   background: #fff;
-  border-color: #d6dee8;
-  color: #334155;
+  border-color: #e6eef0;
+  color: #1f2d33;
 }
 
 .schedule-edit-btn {
@@ -300,9 +317,9 @@
   grid-template-columns: 132px 1fr;
   gap: 14px;
   padding: 12px;
-  border-radius: 20px;
+  border-radius: 12px;
   background: #fff;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid #e6eef0;
 }
 
 .schedule-card-image {
@@ -331,6 +348,7 @@
   gap: 16px;
   flex-wrap: wrap;
   font-weight: 600;
+  font-size: 0.82rem;
 }
 
 .schedule-owner {
@@ -338,18 +356,18 @@
   color: #0f766e;
   border-radius: 999px;
   padding: 6px 10px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
 }
 
 .schedule-empty,
 .schedule-page-loading {
   border: 1px dashed #cbd5e1;
-  border-radius: 18px;
+  border-radius: 12px;
   padding: 18px;
-  color: #64748b;
+  color: #667581;
   text-align: center;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
 }
 
 .vg-schedule-btn {
@@ -365,6 +383,10 @@
 @media (max-width: 720px) {
   .schedule-page-shell {
     padding: 14px;
+  }
+
+  .schedule-panel {
+    padding: 22px 18px;
   }
 
   .schedule-card {

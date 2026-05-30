@@ -53,12 +53,6 @@ const fallbackGymImage =
 
 const toDateInput = (value: string) => value.slice(0, 10);
 
-const toTimeInput = (value: string) => {
-  const dt = new Date(value);
-  if (Number.isNaN(dt.getTime())) return "";
-  return dt.toISOString().slice(11, 16);
-};
-
 const parseDateOnly = (value: string) => {
   const [year, month, day] = toDateInput(value).split("-").map(Number);
   if (!year || !month || !day) return null;
@@ -466,7 +460,7 @@ const SchedulePage = () => {
               Date
               <DatePicker
                 selected={date}
-                onChange={(value) => setDate(value)}
+                onChange={(value: Date | null) => setDate(value)}
                 customInput={
                   <PickerInput placeholder="Select date" icon="📅" />
                 }
@@ -582,7 +576,9 @@ const SchedulePage = () => {
                           <div className="schedule-edit-row">
                             <DatePicker
                               selected={editDate}
-                              onChange={(value) => setEditDate(value)}
+                              onChange={(value: Date | null) =>
+                                setEditDate(value)
+                              }
                               customInput={
                                 <PickerInput
                                   placeholder="Select date"
