@@ -1,25 +1,37 @@
 .create-gym-container {
   display: flex;
   justify-content: center;
-  padding: 24px;
+  padding: 32px 24px;
   background: #f7f9fb;
-  min-height: 60vh;
+  min-height: 70vh;
 }
 
 .create-gym-card {
   width: 100%;
-  max-width: 680px;
+  max-width: 760px;
   background: #ffffff;
-  border: 1px solid #e6e6e6;
+  border: 1px solid #edf2f3;
   border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(20, 20, 30, 0.04);
-  padding: 20px 22px;
+  box-shadow: 0 12px 40px rgba(40, 60, 80, 0.06);
+  padding: 28px 36px;
+}
+
+.cg-header {
+  text-align: center;
+  margin-bottom: 6px;
 }
 
 .cg-title {
-  margin: 0 0 12px;
-  font-size: 20px;
-  color: #222;
+  margin: 0 0 6px;
+  font-size: 28px;
+  color: #0b2330;
+  font-weight: 700;
+}
+
+.cg-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #667581;
 }
 
 .cg-error {
@@ -49,58 +61,99 @@
 .cg-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
-.cg-field label {
-  display: block;
-  margin-bottom: 6px;
-  color: #333;
+.cg-field {
+  position: relative;
+}
+
+.cg-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: #123;
   font-weight: 600;
+  font-size: 14px;
+}
+
+.cg-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #0a8b7f;
+  font-size: 16px;
 }
 
 .cg-input,
 .cg-textarea {
   width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #dcdcdc;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #e6eef0;
+  background: #fbfbfd;
   font-size: 14px;
   box-sizing: border-box;
+  color: #123;
 }
 
 .cg-textarea {
-  min-height: 96px;
+  min-height: 110px;
   resize: vertical;
+}
+
+.cg-field-description {
+  display: flex;
+  flex-direction: column;
+}
+
+.cg-desc-count {
+  position: absolute;
+  right: 22px;
+  bottom: 18px;
+  font-size: 12px;
+  color: #9aa8af;
 }
 
 .cg-actions {
   display: flex;
-  gap: 10px;
-  margin-top: 12px;
+  gap: 12px;
+  margin-top: 18px;
   justify-content: flex-end;
+  align-items: center;
 }
 
 .cg-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 14px;
+  padding: 10px 16px;
   border-radius: 8px;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   border: none;
+  gap: 8px;
 }
 
 .cg-btn-primary {
-  background: #0069ff;
+  background: linear-gradient(90deg, #0a8b7f, #0c9b86);
   color: #fff;
+  box-shadow: 0 6px 18px rgba(10, 139, 127, 0.14);
 }
 
 .cg-btn-ghost {
-  background: #f4f6f8;
-  color: #222;
+  background: #fff;
+  color: #1f2d33;
+  border: 1px solid #e6eef0;
+}
+
+.btn-icon {
+  display: inline-block;
+  transform: translateY(-1px);
 }
 
 @media (max-width: 520px) {
@@ -109,6 +162,58 @@
   }
 
   .cg-actions {
-    flex-direction: column;
+    flex-direction: column-reverse;
+    align-items: stretch;
   }
+}
+
+.cg-stars {
+  display: flex;
+  gap: 8px;
+}
+
+.cg-star {
+  background: #fff;
+  border: 1px solid #e6eef0;
+  padding: 6px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #7b8f92;
+}
+
+.cg-star.active {
+  background: #e6fffa;
+  color: #0a8b7f;
+  border-color: #0a8b7f;
+}
+
+.price-input {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.currency {
+  background: #fff;
+  border: 1px solid #e6eef0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: #123;
+  font-weight: 600;
+}
+
+.cg-input-price {
+  padding-left: 12px;
+}
+
+.cg-img-preview img {
+  max-width: 140px;
+  max-height: 96px;
+  border-radius: 8px;
+  margin-top: 10px;
+  border: 1px solid #e6eef0;
+  display: block;
 }
