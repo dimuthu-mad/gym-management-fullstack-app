@@ -111,7 +111,7 @@ const Header = () => {
                     strokeWidth="1.8"
                   />
                 </svg>
-                <span className="sr-only">Profile</span>
+                <span className="nav-text">Profile</span>
               </NavLink>
             )}
           </nav>

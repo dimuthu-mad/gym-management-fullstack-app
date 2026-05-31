@@ -84,10 +84,18 @@
 }
 
 .nav-link-icon {
-  width: 42px;
+  min-width: 42px;
   height: 42px;
-  display: inline-grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+}
+
+.nav-text {
+  display: inline-block;
+  font-weight: 600;
+  color: inherit;
 }
 
 .nav-icon {

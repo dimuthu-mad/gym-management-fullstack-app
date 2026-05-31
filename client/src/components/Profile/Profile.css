@@ -6,24 +6,62 @@
   min-height: 60vh;
 }
 
-.profile-card {
-  width: 100%;
-  max-width: 500px;
+/* Page layout */
+.profile-page {
+  padding: 28px 28px;
   background: #ffffff;
-  border: 1px solid #e6e6e6;
+}
+
+.profile-header {
+  max-width: 1200px;
+  margin: 0 auto 18px;
+}
+
+.profile-main-title {
+  margin: 0 0 8px;
+  font-size: 30px;
+  color: #0b2222;
+  font-weight: 800;
+}
+
+.profile-subtitle {
+  margin: 0;
+  color: #6b6b6b;
+  font-size: 14px;
+}
+
+.profile-grid {
+  max-width: 1200px;
+  margin: 18px auto 40px;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 20px;
+}
+
+/* Card base */
+.card {
+  background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(20, 20, 30, 0.04);
-  padding: 20px 22px;
+  border: 1px solid #edf2f3;
+  box-shadow: 0 12px 40px rgba(40, 60, 80, 0.06);
+  padding: 28px 36px;
+}
+
+.profile-left {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-left-top {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
 }
 
-.profile-title {
-  margin: 0 0 16px;
-  font-size: 24px;
-  color: #222;
+.avatar-wrap {
+  position: relative;
+  display: inline-block;
 }
 
 .profile-picture {
@@ -31,14 +69,182 @@
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  margin: 0 0 16px;
-  border: 3px solid #0069ff;
+  display: block;
 }
 
-.profile-name {
-  margin: 0 0 12px;
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44px;
+  color: #fff;
+  background: linear-gradient(180deg, #6a3fb0, #3c1f93);
+}
+
+.avatar-camera {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #0fb37a;
+  color: #fff;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(11, 107, 89, 0.12);
+  cursor: pointer;
+}
+
+.profile-name-large {
+  margin: 12px 0 6px;
   font-size: 20px;
-  color: #333;
+  font-weight: 700;
+  color: #123;
+}
+
+.role-badge {
+  background: rgba(11, 179, 122, 0.08);
+  color: #0fb37a;
+  padding: 6px 10px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.profile-separator {
+  border: none;
+  height: 1px;
+  background: #f2f6f6;
+  margin: 6px 0 12px;
+}
+
+.profile-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.field-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.field-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #111;
+}
+
+.field-icon svg {
+  color: #111;
+}
+
+.field-label {
+  font-size: 13px;
+  color: #6b6b6b;
+}
+
+.field-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111;
+}
+
+.profile-actions {
+  margin-top: 14px;
+}
+
+.btn-edit {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #0a8b7f, #0c9b86);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(10, 139, 127, 0.14);
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+}
+
+.profile-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.activity-card .activity-title,
+.recent-card .recent-title {
+  font-weight: 800;
+  color: #0b2222;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.activity-stats {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(11, 179, 122, 0.06);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.stat-number {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0b2222;
+}
+
+.stat-label {
+  color: #6b7a79;
+  font-size: 13px;
+}
+
+.recent-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px 12px;
+}
+
+.recent-illustration {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.recent-text {
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: #0b2222;
+}
+
+.recent-sub {
+  color: #6b7a79;
 }
 
 .profile-field {
@@ -78,7 +284,10 @@
 }
 
 @media (max-width: 520px) {
-  .profile-card {
-    padding: 14px;
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+  .profile-page {
+    padding: 12px;
   }
 }

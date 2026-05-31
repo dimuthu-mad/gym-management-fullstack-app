@@ -266,7 +266,17 @@ app.get("/profile", requiresAuth(), async (req, res) => {
     if (!profile) return res.status(401).json({ error: "Not authenticated" });
 
     const user = await ensureUserFromProfile(profile, "USER");
-    res.json(user);
+    // include some activity counts for frontend convenience
+    const reviewCount = await prisma.review.count({
+      where: { userId: user.id },
+    });
+    const scheduleCount = await prisma.schedule.count({
+      where: { userId: user.id },
+    });
+    // favorites not implemented yet; default to 0
+    const favoriteGyms = 0;
+
+    res.json({ ...user, reviewCount, scheduleCount, favoriteGyms });
   } catch (error) {
     console.error(error?.stack || error);
     res.status(500).json({ error: "Failed to load profile" });
