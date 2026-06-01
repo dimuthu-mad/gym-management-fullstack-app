@@ -122,9 +122,9 @@ const ViewGymById = () => {
     );
 
   const reviewCount = gym.reviews?.length ?? 0;
-  const addedDate = gym.createdAt
-    ? new Date(gym.createdAt).toLocaleDateString()
-    : "May 12, 2026";
+  // const addedDate = gym.createdAt
+  //   ? new Date(gym.createdAt).toLocaleDateString()
+  //   : "May 12, 2026";
 
   return (
     <div className="view-gym-container">

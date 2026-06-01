@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import "./Gyms.css";
 import GymCard from "./GymCard";
 
@@ -20,12 +19,6 @@ const GymData = () => {
   const [minRating, setMinRating] = useState<number | "">("");
   const [minPrice, setMinPrice] = useState<number | "">("");
   const [maxPrice, setMaxPrice] = useState<number | "">("");
-  const sampleImages = [
-    "https://images.unsplash.com/photo-1554284126-aa88f22d8d6b?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=1",
-    "https://images.unsplash.com/photo-1549576490-b0b4831ef60a?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=2",
-    "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=3",
-    "https://images.unsplash.com/photo-1526403224744-0b9a9f2c1a13?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=4",
-  ];
 
   useEffect(() => {
     const fetchGyms = async () => {

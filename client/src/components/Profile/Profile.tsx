@@ -18,6 +18,9 @@ const Profile = () => {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const avatarLetter =
+    user?.given_name?.[0] || user?.family_name?.[0] || user?.email?.[0] || "?";
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -82,12 +85,7 @@ const Profile = () => {
             ) : (
               <div className="avatar-wrap">
                 <div className="profile-avatar">
-                  {(user.given_name || user.family_name
-                    ? user.given_name || user.family_name
-                    : user.email || "?"
-                  )
-                    .charAt(0)
-                    .toUpperCase()}
+                  {avatarLetter.toUpperCase()}
                 </div>
                 <button className="avatar-camera" aria-label="Change avatar">
                   <svg
