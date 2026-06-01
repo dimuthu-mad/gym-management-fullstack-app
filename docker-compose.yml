@@ -1,0 +1,82 @@
+version: "3.7"
+
+services:
+  postgres_db:
+    image: postgres:15
+    hostname: postgres_db
+    container_name: fittrack_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: prisma
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - prisma-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+
+  server:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://postgres:prisma@postgres_db:5432/postgres?schema=public"
+      SECRET: "${SECRET}"
+      CLIENT_ID: "${CLIENT_ID}"
+      ISSUER_BASE_URL: "${ISSUER_BASE_URL}"
+      BASE_URL: "http://localhost:3000"
+      FRONTEND_URL: "http://localhost:5173"
+    networks:
+      - prisma-network
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      VITE_API_URL: "http://localhost:3000"
+    networks:
+      - prisma-network
+    depends_on:
+      server:
+        condition: service_started
+
+  prisma-studio:
+    image: node:22-alpine
+    working_dir: /usr/src/app
+    volumes:
+      - ./backend:/usr/src/app
+    command: sh -c "npm install && npx prisma studio --port 5555 --browser none"
+    ports:
+      - "5555:5555"
+    environment:
+      DATABASE_URL: "postgresql://postgres:prisma@postgres_db:5432/postgres?schema=public"
+    networks:
+      - prisma-network
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+
+networks:
+  prisma-network:
+    name: prisma-network
+
+volumes:
+  postgres-data:
