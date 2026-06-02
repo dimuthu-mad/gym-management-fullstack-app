@@ -10,6 +10,7 @@ import { Link, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Schedule.css";
+import { API_URL } from "../../config";
 
 type Gym = {
   id: number;
@@ -240,15 +241,15 @@ const SchedulePage = () => {
       setLoading(true);
       try {
         const [profileResp, gymResp, gymsResp] = await Promise.all([
-          axios.get<Profile>("http://localhost:3000/profile", {
+          axios.get<Profile>(`${API_URL}/profile`, {
             withCredentials: true,
           }),
           gymId
-            ? axios.get<GymDetails>(`http://localhost:3000/gyms/${gymId}`, {
+            ? axios.get<GymDetails>(`${API_URL}/gyms/${gymId}`, {
                 withCredentials: true,
               })
             : Promise.resolve(null),
-          axios.get<Gym[]>("http://localhost:3000/gyms", {
+          axios.get<Gym[]>(`${API_URL}/gyms`, {
             withCredentials: true,
           }),
         ]);
@@ -263,8 +264,8 @@ const SchedulePage = () => {
 
         const schedulesResp = await axios.get<Schedule[]>(
           profileResp.data.role === "ADMIN"
-            ? "http://localhost:3000/schedules"
-            : "http://localhost:3000/my-schedules",
+            ? `${API_URL}/schedules`
+            : `${API_URL}/my-schedules`,
           { withCredentials: true },
         );
 
@@ -332,7 +333,7 @@ const SchedulePage = () => {
     setSaving(true);
     try {
       await axios.post(
-        `http://localhost:3000/gyms/${gymToUse}/schedules`,
+        `${API_URL}/gyms/${gymToUse}/schedules`,
         {
           title,
           date: buildDateOnly(date),
@@ -344,9 +345,7 @@ const SchedulePage = () => {
       );
 
       const schedulesResp = await axios.get<Schedule[]>(
-        isAdmin
-          ? "http://localhost:3000/schedules"
-          : "http://localhost:3000/my-schedules",
+        isAdmin ? `${API_URL}/schedules` : `${API_URL}/my-schedules`,
         { withCredentials: true },
       );
       setSchedules(schedulesResp.data);
@@ -368,7 +367,7 @@ const SchedulePage = () => {
     setSaving(true);
     try {
       await axios.patch(
-        `http://localhost:3000/schedules/${scheduleId}`,
+        `${API_URL}/schedules/${scheduleId}`,
         {
           title: editTitle,
           date: buildDateOnly(editDate),
@@ -379,9 +378,7 @@ const SchedulePage = () => {
       );
 
       const schedulesResp = await axios.get<Schedule[]>(
-        isAdmin
-          ? "http://localhost:3000/schedules"
-          : "http://localhost:3000/my-schedules",
+        isAdmin ? `${API_URL}/schedules` : `${API_URL}/my-schedules`,
         { withCredentials: true },
       );
       setSchedules(schedulesResp.data);
@@ -396,7 +393,7 @@ const SchedulePage = () => {
   const removeSchedule = async (scheduleId: number) => {
     if (!window.confirm("Delete this schedule?")) return;
     try {
-      await axios.delete(`http://localhost:3000/schedules/${scheduleId}`, {
+      await axios.delete(`${API_URL}/schedules/${scheduleId}`, {
         withCredentials: true,
       });
       setSchedules((current) =>

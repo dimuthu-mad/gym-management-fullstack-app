@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Gyms.css";
 import GymCard from "./GymCard";
+import { API_URL } from "../../config";
 
 type gymsProfile = {
   id: number;
@@ -23,12 +24,9 @@ const GymData = () => {
   useEffect(() => {
     const fetchGyms = async () => {
       try {
-        const response = await axios.get<gymsProfile[]>(
-          "http://localhost:3000/gyms",
-          {
-            withCredentials: true,
-          },
-        );
+        const response = await axios.get<gymsProfile[]>(`${API_URL}/gyms`, {
+          withCredentials: true,
+        });
         setGyms(response.data);
       } catch (error) {
         setGyms([]);

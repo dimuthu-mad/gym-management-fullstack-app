@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./Header.css";
+import { API_URL } from "../../config";
 
 const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -12,7 +13,7 @@ const Header = () => {
   useEffect(() => {
     const check = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/profile", {
+        const response = await axios.get(`${API_URL}/profile`, {
           withCredentials: true,
         });
         setIsAuthenticated(true);
@@ -121,16 +122,13 @@ const Header = () => {
               <span className="auth-skeleton" aria-hidden="true" />
             ) : isAuthenticated ? (
               <a
-                href="http://localhost:3000/auth/logout"
+                href={`${API_URL}/auth/logout`}
                 className="auth-btn auth-logout"
               >
                 Logout
               </a>
             ) : (
-              <a
-                href="http://localhost:3000/login"
-                className="auth-btn auth-login"
-              >
+              <a href={`${API_URL}/login`} className="auth-btn auth-login">
                 Login / Sign Up
               </a>
             )}
@@ -248,7 +246,7 @@ const Header = () => {
               <span className="auth-skeleton" aria-hidden="true" />
             ) : isAuthenticated ? (
               <a
-                href="http://localhost:3000/auth/logout"
+                href={`${API_URL}/auth/logout`}
                 className="auth-btn auth-logout"
                 onClick={() => setMenuOpen(false)}
               >
@@ -256,7 +254,7 @@ const Header = () => {
               </a>
             ) : (
               <a
-                href="http://localhost:3000/login"
+                href={`${API_URL}/login`}
                 className="auth-btn auth-login"
                 onClick={() => setMenuOpen(false)}
               >

@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { API_URL } from "../config";
 
 export default function ProtectedRoute({
   children,
@@ -13,7 +14,7 @@ export default function ProtectedRoute({
   >("loading");
 
   useEffect(() => {
-    fetch("http://localhost:3000/profile", {
+    fetch(`${API_URL}/profile`, {
       credentials: "include",
     })
       .then(async (res) => {

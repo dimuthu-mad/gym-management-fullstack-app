@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./GymCard.css";
+import { API_URL } from "../../config";
 
 type Review = { id: number; user: string; rating: number; comment: string };
 type Gym = {
@@ -25,12 +26,9 @@ const GymCard = ({ gym }: { gym: Gym }) => {
     let mounted = true;
     (async () => {
       try {
-        const res = await fetch(
-          `http://localhost:3000/gyms/${gym.id}/reviewscount`,
-          {
-            credentials: "include",
-          },
-        );
+        const res = await fetch(`${API_URL}/gyms/${gym.id}/reviewscount`, {
+          credentials: "include",
+        });
         if (!mounted) return;
         if (!res.ok) return;
         const data = await res.json();

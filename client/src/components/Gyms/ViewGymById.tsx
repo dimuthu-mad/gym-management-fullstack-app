@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./ViewGymById.css";
+import { API_URL } from "../../config";
 
 type Review = {
   id: number;
@@ -49,10 +50,9 @@ const ViewGymById = () => {
     let mounted = true;
     const fetchGym = async () => {
       try {
-        const r = await axios.get<GymDetails>(
-          `http://localhost:3000/gyms/${id}`,
-          { withCredentials: true },
-        );
+        const r = await axios.get<GymDetails>(`${API_URL}/gyms/${id}`, {
+          withCredentials: true,
+        });
         if (!mounted) return;
         setGym(r.data);
       } catch (e) {
@@ -65,7 +65,7 @@ const ViewGymById = () => {
 
       // try to fetch profile
       try {
-        const p = await axios.get("http://localhost:3000/profile", {
+        const p = await axios.get(`${API_URL}/profile`, {
           withCredentials: true,
         });
         if (mounted) setProfile(p.data);
@@ -216,7 +216,7 @@ const ViewGymById = () => {
               e.preventDefault();
               try {
                 const resp = await axios.post(
-                  `http://localhost:3000/gyms/${gym.id}/reviews`,
+                  `${API_URL}/gyms/${gym.id}/reviews`,
                   { rating: Number(newRating), comment: newComment },
                   { withCredentials: true },
                 );
@@ -344,7 +344,7 @@ const ViewGymById = () => {
                             comment: editComment,
                           };
                           const resp = await axios.patch(
-                            `http://localhost:3000/reviews/${review.id}`,
+                            `${API_URL}/reviews/${review.id}`,
                             body,
                             { withCredentials: true },
                           );

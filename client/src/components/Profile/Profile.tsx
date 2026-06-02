@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Profile.css";
+import { API_URL } from "../../config";
 
 type UserProfile = {
   given_name?: string;
@@ -24,12 +25,9 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get<UserProfile>(
-          "http://localhost:3000/profile",
-          {
-            withCredentials: true,
-          },
-        );
+        const response = await axios.get<UserProfile>(`${API_URL}/profile`, {
+          withCredentials: true,
+        });
         setUser(response.data);
       } catch (error) {
         setUser(null);

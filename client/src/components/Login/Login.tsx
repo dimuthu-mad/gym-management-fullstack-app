@@ -1,9 +1,11 @@
+import { API_URL } from "../../config";
+
 const Login = () => {
   return (
     <div>
-      <a href="http://localhost:3000/login">Login</a>
+      <a href={`${API_URL}/auth/login`}>Login</a>
       <br />
-      <a href="http://localhost:3000/auth/logout">Logout</a>
+      <a href={`${API_URL}/auth/logout`}>Logout</a>
     </div>
   );
 };

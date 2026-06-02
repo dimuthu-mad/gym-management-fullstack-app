@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import "./CreateGym.css";
+import { API_URL } from "../../config";
 
 const CreateGym = () => {
   const [name, setName] = useState("");
@@ -20,7 +21,7 @@ const CreateGym = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/profile", {
+        const res = await axios.get(`${API_URL}/profile`, {
           withCredentials: true,
         });
         setIsAuthenticated(true);
@@ -62,7 +63,7 @@ const CreateGym = () => {
 
     try {
       setLoading(true);
-      await axios.post("http://localhost:3000/gyms", payload, {
+      await axios.post(`${API_URL}/gyms`, payload, {
         withCredentials: true,
       });
       navigate("/gyms");
@@ -99,10 +100,7 @@ const CreateGym = () => {
             <h3>Sign in required</h3>
             <p>You need to be signed in to create a gym.</p>
             <div className="cg-actions">
-              <a
-                className="cg-btn cg-btn-primary"
-                href="http://localhost:3000/login"
-              >
+              <a className="cg-btn cg-btn-primary" href={`${API_URL}/login`}>
                 Sign in
               </a>
               <Link className="cg-btn cg-btn-ghost" to="/gyms">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, Link, useParams } from "react-router-dom";
+import { API_URL } from "../../config";
 
 const CreateReview = () => {
   const [user, setUser] = useState("");
@@ -17,7 +18,7 @@ const CreateReview = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        await axios.get("http://localhost:3000/profile", {
+        await axios.get(`${API_URL}/profile`, {
           withCredentials: true,
         });
         setIsAuthenticated(true);
@@ -54,7 +55,7 @@ const CreateReview = () => {
     try {
       setLoading(true);
       if (!id) throw new Error("Missing gym id");
-      await axios.post(`http://localhost:3000/gyms/${id}/reviews`, payload, {
+      await axios.post(`${API_URL}/gyms/${id}/reviews`, payload, {
         withCredentials: true,
       });
       navigate(`/gyms/${id}`);
@@ -84,10 +85,7 @@ const CreateReview = () => {
             <h3>Sign in required</h3>
             <p>You need to be signed in to create a review.</p>
             <div className="cg-actions">
-              <a
-                className="cg-btn cg-btn-primary"
-                href="http://localhost:3000/login"
-              >
+              <a className="cg-btn cg-btn-primary" href={`${API_URL}/login`}>
                 Sign in
               </a>
               <Link className="cg-btn cg-btn-ghost" to="/gyms">
