@@ -12,10 +12,16 @@ const prisma = new PrismaClient();
 
 app.use(authMiddleware); // Apply Auth0 middleware globally
 app.use(express.json());
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173", // Allow requests from the React app
+//     credentials: true, // Allow cookies to be sent
+//   }),
+// );
 app.use(
   cors({
-    origin: "http://localhost:5173", // Allow requests from the React app
-    credentials: true, // Allow cookies to be sent
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
   }),
 );
 
@@ -30,7 +36,7 @@ const formatReview = (review) => ({
 // Protected route
 app.get("/", (req, res) => {
   return res.oidc.login({
-    returnTo: "http://localhost:5173",
+    returnTo: process.env.FRONTEND_URL,
   });
 });
 
@@ -462,9 +468,14 @@ app.delete("/schedules/:id", requiresAuth(), async (req, res) => {
 app.get("/gyms/:id/reviewcount", getGymReviewsCount);
 app.get("/gyms/:id/reviewscount", getGymReviewsCount);
 
+// app.get("/auth/logout", (req, res) => {
+//   return res.oidc.logout({
+//     returnTo: process.env.FRONTEND_URL || "http://localhost:5173",
+//   });
+// });
 app.get("/auth/logout", (req, res) => {
-  return res.oidc.logout({
-    returnTo: process.env.FRONTEND_URL || "http://localhost:5173",
+  res.oidc.logout({
+    returnTo: process.env.FRONTEND_URL,
   });
 });
 
