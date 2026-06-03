@@ -468,7 +468,7 @@ app.delete("/schedules/:id", requiresAuth(), async (req, res) => {
 app.get("/gyms/:id/reviewcount", getGymReviewsCount);
 app.get("/gyms/:id/reviewscount", getGymReviewsCount);
 
-// app.get("/auth/logout", (req, res) => {
+/// app.get("/auth/logout", (req, res) => {
 //   return res.oidc.logout({
 //     returnTo: process.env.FRONTEND_URL || "http://localhost:5173",
 //   });
