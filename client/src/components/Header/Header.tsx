@@ -91,14 +91,6 @@ const Header = () => {
               Gyms
             </NavLink>
 
-            <a href="/#reviews" className="nav-link">
-              Reviews
-            </a>
-
-            <a href="/#about" className="nav-link">
-              About Us
-            </a>
-
             {isAuthenticated && (
               <NavLink
                 to="/schedules"
@@ -222,22 +214,6 @@ const Header = () => {
             >
               Gyms
             </NavLink>
-
-            <a
-              href="/#reviews"
-              onClick={() => setMenuOpen(false)}
-              className="mobile-link"
-            >
-              Reviews
-            </a>
-
-            <a
-              href="/#about"
-              onClick={() => setMenuOpen(false)}
-              className="mobile-link"
-            >
-              About Us
-            </a>
 
             {isAuthenticated && (
               <NavLink
