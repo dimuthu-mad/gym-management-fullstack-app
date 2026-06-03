@@ -304,18 +304,42 @@
 .home-socials {
   display: flex;
   justify-content: flex-end;
-  gap: 22px;
+  gap: 18px;
 }
 
 .home-socials a {
   display: inline-grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   color: var(--home-ink);
-  font-size: 1rem;
-  font-weight: 800;
   text-decoration: none;
+  border-radius: 50%;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.home-socials a:hover {
+  background: var(--home-green-soft);
+  transform: translateY(-1px);
+}
+
+.home-socials svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+  fill: currentColor;
+  stroke: none;
+}
+
+.home-socials a:nth-child(2) svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 @media (max-width: 1080px) {

@@ -47,6 +47,26 @@ const PencilIcon = () => (
   </svg>
 );
 
+const FacebookIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M14 8.5h2V5h-2.7C10.35 5 9 6.82 9 9.2V11H6.5v3.6H9V21h4v-6.4h3l.5-3.6H13V9.75c0-.8.3-1.25 1-1.25Z" />
+  </svg>
+);
+
+const InstagramIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M8.2 3h7.6A5.2 5.2 0 0 1 21 8.2v7.6a5.2 5.2 0 0 1-5.2 5.2H8.2A5.2 5.2 0 0 1 3 15.8V8.2A5.2 5.2 0 0 1 8.2 3Z" />
+    <path d="M16.7 7.35h.01" />
+    <path d="M15.6 12a3.6 3.6 0 1 1-7.2 0 3.6 3.6 0 0 1 7.2 0Z" />
+  </svg>
+);
+
+const XIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M4 4h4.7l4.05 5.5L17.55 4H21l-6.9 7.9L21.5 21h-4.7l-4.45-6.05L7 21H3.5l7.35-8.4L4 4Z" />
+  </svg>
+);
+
 const stats = [
   { icon: <DumbbellIcon />, value: "250+", label: "Total Gyms" },
   { icon: <StarIcon />, value: "2.5K+", label: "Reviews" },
@@ -150,13 +170,13 @@ const Home = () => {
 
         <div className="home-socials" aria-label="Social links">
           <a href="https://www.facebook.com/" aria-label="Facebook">
-            f
+            <FacebookIcon />
           </a>
           <a href="https://www.instagram.com/" aria-label="Instagram">
-            IG
+            <InstagramIcon />
           </a>
           <a href="https://x.com/" aria-label="X">
-            X
+            <XIcon />
           </a>
         </div>
       </footer>
