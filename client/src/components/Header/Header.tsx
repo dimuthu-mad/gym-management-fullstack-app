@@ -128,7 +128,7 @@ const Header = () => {
                 Logout
               </a>
             ) : (
-              <a href={`${API_URL}/login`} className="auth-btn auth-login">
+              <a href={`${API_URL}/auth/login`} className="auth-btn auth-login">
                 Login / Sign Up
               </a>
             )}
