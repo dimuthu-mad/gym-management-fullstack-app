@@ -8,7 +8,7 @@
 }
 
 .header-inner {
-  width: min(1180px, 100%);
+  width: min(1260px, 100%);
   margin: 0 auto;
   padding: 18px 24px;
   display: grid;
@@ -49,34 +49,34 @@
   width: 54px;
   height: 54px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #fff7f1, #ffe2d1);
-  border: 2px solid rgba(239, 127, 92, 0.28);
-  color: #ef7f5c;
+  background: #ffffff;
+  border: 1px solid rgba(255, 103, 50, 0.35);
+  color: #ff6732;
   font-size: 0.85rem;
   font-weight: 900;
   letter-spacing: 0.08em;
-  box-shadow: 0 10px 20px rgba(239, 127, 92, 0.14);
+  box-shadow: none;
 }
 
 .brand-name {
-  font-size: 1.2rem;
+  font-size: 1.35rem;
 }
 
 .header-nav {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 28px;
   flex-wrap: wrap;
   justify-content: center;
   min-width: 0;
 }
 
 .nav-link {
-  color: #213746;
+  color: #101c29;
   text-decoration: none;
   font-size: 0.98rem;
   font-weight: 600;
-  padding: 8px 10px;
+  padding: 8px 4px;
   border-radius: 999px;
   transition:
     color 0.15s ease,
@@ -117,11 +117,11 @@
 }
 
 .nav-link:hover {
-  color: #ef7f5c;
+  color: #168b52;
 }
 
 .nav-link-active {
-  color: #0f766e;
+  color: #168b52;
 }
 
 .header-actions {
@@ -147,7 +147,7 @@
 }
 
 .region-pill::before {
-  content: "◌";
+  content: "o";
   color: #10212d;
   font-size: 0.9rem;
 }
@@ -170,8 +170,8 @@
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 800;
-  padding: 10px 16px;
-  border-radius: 999px;
+  padding: 12px 20px;
+  border-radius: 8px;
   color: #ffffff;
   box-shadow: 0 12px 22px rgba(15, 23, 42, 0.12);
   transition:
@@ -181,11 +181,11 @@
 }
 
 .auth-login {
-  background: linear-gradient(135deg, #ef7f5c, #f43f5e);
+  background: #ff6732;
 }
 
 .auth-logout {
-  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  background: #168b52;
 }
 
 .auth-btn:hover {
