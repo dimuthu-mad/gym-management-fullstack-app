@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./Header.css";
@@ -9,24 +9,37 @@ const Header = () => {
   const [checking, setChecking] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
+    let cancelled = false;
+
     const check = async () => {
+      setChecking(true);
       try {
         const response = await axios.get(`${API_URL}/profile`, {
           withCredentials: true,
         });
+
+        if (cancelled) return;
         setIsAuthenticated(true);
         setIsAdmin(response.data.role === "ADMIN");
       } catch {
+        if (cancelled) return;
         setIsAuthenticated(false);
         setIsAdmin(false);
       } finally {
+        if (cancelled) return;
         setChecking(false);
       }
     };
+
     check();
-  }, []);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [location.pathname]);
 
   return (
     <header className="app-header">
@@ -133,8 +146,6 @@ const Header = () => {
               </a>
             )}
           </div>
-
-          <a href={`${API_URL}/auth/login`}>Login / Sign Up 22</a>
         </div>
 
         <button
@@ -256,7 +267,7 @@ const Header = () => {
               </a>
             ) : (
               <a
-                href={`${API_URL}/login`}
+                href={`${API_URL}/auth/login`}
                 className="auth-btn auth-login"
                 onClick={() => setMenuOpen(false)}
               >
