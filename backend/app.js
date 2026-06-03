@@ -500,6 +500,7 @@ app.get("/auth/login", (req, res) => {
   return res.oidc.login({
     returnTo: frontendURL,
     authorizationParams: {
+      scope: "openid profile email",
       prompt: "login",
     },
   });
