@@ -5,3 +5,5 @@ export const API_URL =
   (isProduction
     ? "https://fittrack-backend-k8ln.onrender.com"
     : "http://localhost:3000");
+
+export const LOGIN_URL = `${API_URL}${isProduction ? "/auth/login" : "/login"}`;

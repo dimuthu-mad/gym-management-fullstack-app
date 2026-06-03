@@ -2,7 +2,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./Header.css";
-import { API_URL } from "../../config";
+import { API_URL, LOGIN_URL } from "../../config";
 
 const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -158,7 +158,7 @@ const Header = () => {
                 Logout
               </a>
             ) : (
-              <a href={`${API_URL}/auth/login`} className="auth-btn auth-login">
+              <a href={LOGIN_URL} className="auth-btn auth-login">
                 Login / Sign Up
               </a>
             )}
@@ -284,7 +284,7 @@ const Header = () => {
               </a>
             ) : (
               <a
-                href={`${API_URL}/auth/login`}
+                href={LOGIN_URL}
                 className="auth-btn auth-login"
                 onClick={() => setMenuOpen(false)}
               >

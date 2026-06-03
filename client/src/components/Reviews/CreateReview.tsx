@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, Link, useParams } from "react-router-dom";
-import { API_URL } from "../../config";
+import { API_URL, LOGIN_URL } from "../../config";
 
 const CreateReview = () => {
   const [user, setUser] = useState("");
@@ -85,7 +85,7 @@ const CreateReview = () => {
             <h3>Sign in required</h3>
             <p>You need to be signed in to create a review.</p>
             <div className="cg-actions">
-              <a className="cg-btn cg-btn-primary" href={`${API_URL}/login`}>
+              <a className="cg-btn cg-btn-primary" href={LOGIN_URL}>
                 Sign in
               </a>
               <Link className="cg-btn cg-btn-ghost" to="/gyms">
