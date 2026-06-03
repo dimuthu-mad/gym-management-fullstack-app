@@ -1,132 +1,154 @@
-# Gym Review API Project
+# FitTrack - Gym Discovery & Review Platform
 
-## Overview
+FitTrack is a full-stack web application that helps users discover gyms, compare facilities, read reviews, and share their own experiences.
 
-This project is a secure Gym Review REST API built with Node.js, Express, React, Vitest, and Auth0 authentication. The project includes protected routes, unit tests, integration tests, and a GitHub Actions CI pipeline.
+The project was developed as part of the Full-Stack Development & Production Deployment course and demonstrates:
+
+- Full-stack application development
+- Authentication with Auth0
+- PostgreSQL database integration
+- Docker containerization
+- Cloud deployment
+- CI/CD with GitHub Actions
 
 ---
 
-## Setup
+## Live Application
+
+### Frontend (Vercel)
+https://fittrack-client-kappa.vercel.app
+
+### Backend (Render)
+https://fittrack-backend-k8ln.onrender.com
+
+---
+
+## Features
+
+### User Features
+- Browse gyms
+- View gym details
+- Read reviews
+- Submit reviews
+- Edit own reviews
+- Create workout schedules
+- View personal schedules
+- User authentication with Auth0
+
+### Admin Features
+- Create new gyms
+- View all schedules
+- Manage application data
+
+---
+
+## Tech Stack
+
+- Frontend: React, TypeScript, Vite
+- Backend: Node.js, Express
+- Database: PostgreSQL (Render)
+- Authentication: Auth0
+- Deployment: Vercel + Render
+- CI/CD: GitHub Actions
+- Containerization: Docker
+
+## Environment Variables
+
+### Backend `.env`
+
+```env
+DATABASE_URL=
+SECRET=
+BASE_URL=http://localhost:3000
+CLIENT_ID=
+ISSUER_BASE_URL=
+FRONTEND_URL=http://localhost:5173
+PORT=3000
+```
+### Frontend `.env`
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+## Install and Run Locally
+
+### Prerequisites
+
+- Docker Desktop
+- Git
 
 ### Clone the Repository
 
-    git clone https://github.com/dimuthu-mad/Gym-Review-API-2 
+```bash
+git clone <repository-url>
+cd gym-management-fullstack-app
+```
 
-    cd Gym-Review-API
+### Run with Docker
 
-### Install Dependencies
+Build and start all services:
 
-Backend
+```bash
+docker compose up --build
+```
 
-    cd backend
-    npm install
+The application will be available at:
 
-Client
+Frontend:
+```text
+http://localhost:5173
+```
 
-    cd client
-    npm install
+Backend:
+```text
+http://localhost:3000
+```
 
-### Environment Variables
+### Stop the Application
 
-Create a .env file inside the backend folder.
+```bash
+docker compose down
+```
+Run Prisma migration and seed inside Docker:
 
-Refer to .env.example for required variables.
+```bash
+docker compose exec server npx prisma migrate deploy
+docker compose exec server npx prisma db seed
+```
 
-### Running the Project Locally
+## Deployment
 
-Start Backend
+- Frontend is deployed on Vercel.
+- Backend is deployed on Render.
+- Database is hosted using Render PostgreSQL.
+- Environment variables are configured separately in Vercel and Render.
 
-    cd backend
-    npm run dev
-  open - http://localhost:3000
+## Security
 
-Start Client
-
-    cd client
-    npm run dev
-  open - http://localhost:5173
-
-## Testing
-
-### Run Test locally
-
-Run Backend integration tests
-
-      cd backend
-      npm test
-
-Run frontend integration tests
-
-      cd client
-      npm test
-
-### Screenshot of passing tests run locally
-
-<img width="1316" height="582" alt="Screenshot 2026-05-15 171556" src="https://github.com/user-attachments/assets/b9bfb21c-88fa-4b4f-9cd0-8c75f3563655" />
-
-<img width="1320" height="695" alt="Screenshot 2026-05-15 171801" src="https://github.com/user-attachments/assets/97718284-8add-4ec2-9de4-de400eb8d6fd" />
-
-### Screenshot of the passing GitHub Actions pipeline
-
-<img width="1893" height="906" alt="Screenshot 2026-05-15 163947" src="https://github.com/user-attachments/assets/95fe5977-a7be-4a90-a431-9a07d000efec" />
-
-
-## Authentication
-
-### Authentication Provider
-
-This project uses Auth0 with express-openid-connect.
-
-Auth0 was chosen because it provides secure session-based authentication and integrates well with Express applications.
-
-### Authentication Implementation
-
-Protected routes use requiresAuth() middleware.
-
-Protected routes:
-
-      POST /gyms
-      POST /gyms/:id/reviews
-      GET /profile
-
-Unauthenticated users receive:
-
-      401 Unauthorized
-
-## Security decisions
-
-  Environment Variables
-
-  - Sensitive values such as Auth0 credentials are stored in .env files and GitHub Secrets instead of hardcoding them into the codebase.
-
-  No Secrets in Repository
-
-  - Secrets are excluded using .gitignore.
-
-  Authentication Protection
-
-  - Protected routes return 401 Unauthorized for unauthenticated users.
-
-  Token Storage
-
-  - Tokens are not stored in localStorage because localStorage can be vulnerable to XSS attacks. Session-based authentication was used instead
+- Secrets are stored in `.env` files and cloud environment variables.
+- `.env` files are not committed to GitHub.
+- CORS is restricted to the frontend URL.
+- Authentication is handled using Auth0.
+- HTTPS is used in production.
 
 ## Reflections
 
-### Implementation Choices
+### Why did I choose Vercel and Render?
 
-- Node.js + Express for backend
-- React + Vite for frontend
-- Vitest for testing
-- Auth0 for authentication
-- GitHub Actions for CI pipeline
-- An in-memory array was used instead of a database because the assignment focused mainly on authentication and testing.
+I used Vercel for the frontend because it is easy to deploy React/Vite applications. I used Render for the backend and PostgreSQL database because it supports Node.js applications and managed databases.
 
-### Challenges
-- Configuring Auth0 correctly
-- Setting up integration tests with protected routes
-- Configuring GitHub Actions secrets
+### What challenges did I face with Docker?
 
-### What I Would Improve
-- Add database such as PostgreSQL
-- Improve frontend UI design
+The main challenge was connecting the backend container to the PostgreSQL container and using the correct database URL inside Docker.
+
+### How did I handle environment variables and secrets?
+
+Local environment variables are stored in `.env` files. Production variables are stored in Vercel and Render environment settings. Secrets are not committed to GitHub.
+
+### What would I do differently with one more week?
+
+I would improve the UI, add more tests, improve admin features, and add better error handling.
+
+### How did I ensure authentication works after deployment?
+
+I updated Auth0 callback URLs, logout URLs, allowed origins, and backend CORS settings to use the deployed frontend and backend URLs.
