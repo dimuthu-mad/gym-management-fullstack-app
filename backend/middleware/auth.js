@@ -19,13 +19,16 @@ export const authMiddleware = auth(config);
 
 import { auth } from "express-openid-connect";
 import dotenv from "dotenv";
+import { ensureUserFromProfile } from "../auth-user.js";
 
 dotenv.config();
 
+const isProduction = process.env.NODE_ENV === "production";
 const baseURL =
-  process.env.BASE_URL && process.env.BASE_URL.startsWith("http")
-    ? process.env.BASE_URL
-    : "http://localhost:3000";
+  process.env.BASE_URL ||
+  (isProduction
+    ? "https://fittrack-backend-k8ln.onrender.com"
+    : "http://localhost:3000");
 
 const config = {
   authRequired: false,
@@ -36,6 +39,49 @@ const config = {
   clientID: process.env.CLIENT_ID || "test-client-id",
   issuerBaseURL: process.env.ISSUER_BASE_URL || "https://example.com",
   errorOnRequiredAuth: true,
+
+  session: {
+    cookie: {
+      sameSite: isProduction ? "None" : "Lax",
+      secure: isProduction,
+      httpOnly: true,
+    },
+  },
+  transactionCookie: {
+    sameSite: isProduction ? "None" : "Lax",
+  },
 };
 
-export const authMiddleware = auth(config);
+let authMiddleware;
+if (process.env.NODE_ENV === "test") {
+  authMiddleware = (req, res, next) => {
+    req.oidc = {
+      isAuthenticated: () => false,
+      user: null,
+    };
+    return next();
+  };
+} else {
+  authMiddleware = auth(config);
+}
+
+export const syncUserFromOidc = async (req, res, next) => {
+  if (!req.oidc?.isAuthenticated?.()) {
+    return next();
+  }
+
+  const profile = req.oidc?.user;
+  if (!profile?.sub || !profile?.email) {
+    return next();
+  }
+
+  try {
+    req.currentUser = await ensureUserFromProfile(profile, "USER");
+  } catch (error) {
+    console.error(error?.stack || error);
+  }
+
+  return next();
+};
+
+export { authMiddleware };

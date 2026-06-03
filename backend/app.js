@@ -2,15 +2,23 @@
 import express from "express";
 import cors from "cors";
 import { PrismaClient } from "@prisma/client";
-import { authMiddleware } from "./middleware/auth.js";
+import { authMiddleware, syncUserFromOidc } from "./middleware/auth.js";
 import { ensureUserFromProfile } from "./auth-user.js";
-import pkg from "express-openid-connect";
-const { requiresAuth } = pkg;
 
 const app = express();
 const prisma = new PrismaClient();
 
+const isProduction = process.env.NODE_ENV === "production";
+const frontendURL =
+  process.env.FRONTEND_URL ||
+  (isProduction
+    ? "https://fittrack-client-kappa.vercel.app"
+    : "http://localhost:5173");
+
+app.set("trust proxy", 1);
+
 app.use(authMiddleware); // Apply Auth0 middleware globally
+app.use(syncUserFromOidc);
 app.use(express.json());
 // app.use(
 //   cors({
@@ -20,7 +28,7 @@ app.use(express.json());
 // );
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: frontendURL,
     credentials: true,
   }),
 );
@@ -33,10 +41,18 @@ const formatReview = (review) => ({
   createdAt: review.createdAt ? review.createdAt.toISOString() : undefined,
 });
 
+const requireAuth = (req, res, next) => {
+  if (req.oidc?.isAuthenticated?.()) {
+    return next();
+  }
+
+  return res.status(401).json({ error: "Not authenticated" });
+};
+
 // Protected route
 app.get("/", (req, res) => {
   return res.oidc.login({
-    returnTo: process.env.FRONTEND_URL,
+    returnTo: frontendURL,
   });
 });
 
@@ -55,7 +71,7 @@ app.get("/gyms", async (req, res) => {
   }
 });
 
-app.patch("/reviews/:id", requiresAuth(), async (req, res) => {
+app.patch("/reviews/:id", requireAuth, async (req, res) => {
   try {
     const reviewId = Number(req.params.id);
     if (!Number.isInteger(reviewId)) {
@@ -157,7 +173,7 @@ app.get("/gyms/:id", async (req, res) => {
   }
 });
 
-app.post("/gyms/:id/reviews", requiresAuth(), async (req, res) => {
+app.post("/gyms/:id/reviews", requireAuth, async (req, res) => {
   try {
     const gymId = Number(req.params.id);
     if (!Number.isInteger(gymId)) {
@@ -213,7 +229,7 @@ app.post("/gyms/:id/reviews", requiresAuth(), async (req, res) => {
   }
 });
 
-app.post("/gyms", requiresAuth(), async (req, res) => {
+app.post("/gyms", requireAuth, async (req, res) => {
   try {
     const { name, location, description } = req.body;
     const rating =
@@ -266,12 +282,13 @@ app.post("/gyms", requiresAuth(), async (req, res) => {
   }
 });
 
-app.get("/profile", requiresAuth(), async (req, res) => {
+app.get("/profile", requireAuth, async (req, res) => {
   try {
     const profile = req.oidc?.user;
     if (!profile) return res.status(401).json({ error: "Not authenticated" });
 
-    const user = await ensureUserFromProfile(profile, "USER");
+    const user =
+      req.currentUser || (await ensureUserFromProfile(profile, "USER"));
     // include some activity counts for frontend convenience
     const reviewCount = await prisma.review.count({
       where: { userId: user.id },
@@ -309,7 +326,7 @@ const getGymReviewsCount = async (req, res) => {
 };
 
 //Create schedule for logged-in user
-app.post("/gyms/:id/schedules", requiresAuth(), async (req, res) => {
+app.post("/gyms/:id/schedules", requireAuth, async (req, res) => {
   try {
     const gymId = Number(req.params.id);
     const { title, date, startTime, endTime } = req.body;
@@ -348,7 +365,7 @@ app.post("/gyms/:id/schedules", requiresAuth(), async (req, res) => {
 });
 
 //Get only my schedules
-app.get("/my-schedules", requiresAuth(), async (req, res) => {
+app.get("/my-schedules", requireAuth, async (req, res) => {
   try {
     const auth0Id = req.oidc.user.sub;
     const dbUser = await prisma.user.findUnique({
@@ -370,7 +387,7 @@ app.get("/my-schedules", requiresAuth(), async (req, res) => {
 });
 
 //Admin can see all schedules
-app.get("/schedules", requiresAuth(), async (req, res) => {
+app.get("/schedules", requireAuth, async (req, res) => {
   try {
     const auth0Id = req.oidc.user.sub;
     const dbUser = await prisma.user.findUnique({
@@ -393,7 +410,7 @@ app.get("/schedules", requiresAuth(), async (req, res) => {
 });
 
 //Update schedule: owner or admin only
-app.patch("/schedules/:id", requiresAuth(), async (req, res) => {
+app.patch("/schedules/:id", requireAuth, async (req, res) => {
   try {
     const scheduleId = Number(req.params.id);
     const { title, date, startTime, endTime } = req.body;
@@ -434,7 +451,7 @@ app.patch("/schedules/:id", requiresAuth(), async (req, res) => {
 });
 
 //Delete schedule: owner or admin only
-app.delete("/schedules/:id", requiresAuth(), async (req, res) => {
+app.delete("/schedules/:id", requireAuth, async (req, res) => {
   try {
     const scheduleId = Number(req.params.id);
     const auth0Id = req.oidc.user.sub;
@@ -475,13 +492,13 @@ app.get("/gyms/:id/reviewscount", getGymReviewsCount);
 // });
 app.get("/auth/logout", (req, res) => {
   res.oidc.logout({
-    returnTo: process.env.FRONTEND_URL,
+    returnTo: frontendURL,
   });
 });
 
 app.get("/auth/login", (req, res) => {
   return res.oidc.login({
-    returnTo: process.env.FRONTEND_URL,
+    returnTo: frontendURL,
     authorizationParams: {
       prompt: "login",
     },
