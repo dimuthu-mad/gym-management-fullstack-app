@@ -479,4 +479,13 @@ app.get("/auth/logout", (req, res) => {
   });
 });
 
+app.get("/auth/login", (req, res) => {
+  return res.oidc.login({
+    returnTo: process.env.FRONTEND_URL,
+    authorizationParams: {
+      prompt: "login",
+    },
+  });
+});
+
 export default app;

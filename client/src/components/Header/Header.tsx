@@ -133,6 +133,8 @@ const Header = () => {
               </a>
             )}
           </div>
+
+          <a href={`${API_URL}/auth/login`}>Login / Sign Up 22</a>
         </div>
 
         <button
