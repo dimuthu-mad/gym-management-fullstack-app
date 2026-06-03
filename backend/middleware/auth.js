@@ -50,6 +50,20 @@ const config = {
   transactionCookie: {
     sameSite: isProduction ? "None" : "Lax",
   },
+
+  afterCallback: async (_req, _res, session) => {
+    const userProfile = session?.user;
+
+    if (userProfile?.sub && userProfile?.email) {
+      try {
+        await ensureUserFromProfile(userProfile, "USER");
+      } catch (error) {
+        console.error(error?.stack || error);
+      }
+    }
+
+    return session;
+  },
 };
 
 let authMiddleware;
