@@ -13,24 +13,38 @@ const Header = () => {
 
   useEffect(() => {
     let cancelled = false;
+    let timeoutId: number | undefined;
+
+    const sleep = (ms: number) =>
+      new Promise<void>((resolve) => {
+        timeoutId = window.setTimeout(resolve, ms);
+      });
 
     const check = async () => {
       setChecking(true);
-      try {
-        const response = await axios.get(`${API_URL}/profile`, {
-          withCredentials: true,
-        });
 
-        if (cancelled) return;
-        setIsAuthenticated(true);
-        setIsAdmin(response.data.role === "ADMIN");
-      } catch {
-        if (cancelled) return;
-        setIsAuthenticated(false);
-        setIsAdmin(false);
-      } finally {
-        if (cancelled) return;
-        setChecking(false);
+      for (let attempt = 0; attempt < 4; attempt += 1) {
+        try {
+          const response = await axios.get(`${API_URL}/profile`, {
+            withCredentials: true,
+          });
+
+          if (cancelled) return;
+          setIsAuthenticated(true);
+          setIsAdmin(response.data.role === "ADMIN");
+          setChecking(false);
+          return;
+        } catch {
+          if (cancelled) return;
+          if (attempt < 3) {
+            await sleep(250);
+            continue;
+          }
+
+          setIsAuthenticated(false);
+          setIsAdmin(false);
+          setChecking(false);
+        }
       }
     };
 
@@ -38,6 +52,9 @@ const Header = () => {
 
     return () => {
       cancelled = true;
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
     };
   }, [location.pathname]);
 
