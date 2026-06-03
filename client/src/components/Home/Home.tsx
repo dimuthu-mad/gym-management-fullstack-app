@@ -160,14 +160,6 @@ const Home = () => {
           <p>(c) 2026 FitTrack. All rights reserved.</p>
         </div>
 
-        <nav className="home-footer-nav" aria-label="Footer navigation">
-          <Link to="/">Home</Link>
-          <Link to="/gyms">Gyms</Link>
-          <a href="#reviews">Reviews</a>
-          <a href="#about">About Us</a>
-          <a href="mailto:hello@fittrack.local">Contact</a>
-        </nav>
-
         <div className="home-socials" aria-label="Social links">
           <a href="https://www.facebook.com/" aria-label="Facebook">
             <FacebookIcon />
